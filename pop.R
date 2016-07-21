@@ -1,8 +1,8 @@
-### Does Land Use and Demography affect Air Dose reduction
-temp = list.files(pattern="*.csv")
-myfiles = lapply(temp, read.delim)
-#
+### Does Land Use and population density affect Fukushima Air Dose reduction ?
+#Collect relevant data, explore and #Apply different models to test the hypothesis
+library(dplyr)
 library(readr)
+library(ggplot2)
 pas <- url("http://emdb.jaea.go.jp/emdb/assets/site_data/en/csv_utf8/10214700024/10214700024_00_201301.csv.zip")
 # http://emdb.jaea.go.jp/emdb/assets/site_data/en/csv_utf8/10214700024/10214700024_00_201301.csv.zip
 # http://emdb.jaea.go.jp/emdb/assets/site_data/en/csv_utf8/10214700024/10214700024_00_201302.csv.zip
@@ -12,15 +12,9 @@ pas <- url("http://emdb.jaea.go.jp/emdb/assets/site_data/en/csv_utf8/10214700024
 url_2013 <- "http://emdb.jaea.go.jp/emdb/assets/site_data/en/csv_utf8/10214700024/10214700024_00_2013"
 url_2014 <- "http://emdb.jaea.go.jp/emdb/assets/site_data/en/csv_utf8/10214700026/10214700026_00_2014"
 
-files <- list.files(path=pas, pattern="*.csv")
-for(file in files)
-{
-        read_csv(file)
-}
 # any(grepl("tidyr",installed.packages()))
 # sum(file.info(list.files(".", all.files = TRUE, recursive = TRUE))$size) 
-library(dplyr)
-library(readr)
+
 temp = list.files(pattern="*.csv")
 myfiles = lapply(temp, read_csv)
 myfile <- as.data.frame(myfiles)
@@ -32,13 +26,11 @@ air3 <- read_csv(file = "10200000003_07.csv")
 air4 <- read_csv(file = "10200000004_07.csv")
 air5 <- read_csv(file = "10200000005_07.csv")
 air6 <- read_csv(file = "10200000006_07.csv")
-        
 dim(air2)
 str(air2)
 names(air2) <- c("gridcode","startdate","enddate","pref","city","no_samples",
                  "AvgAirDoseRate","NE_nLat","NE_eLong","NW_nLat","NW_eLong",
                  "SW_nLat","SW_eLong","SE_nLat","SE_eLong")
 names(air2)
-library(ggplot2)
 ggplot(data = air2,mapping = aes(x = enddate, y = AvgAirDoseRate) )+
         geom_point()
