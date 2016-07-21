@@ -34,3 +34,18 @@ names(air2) <- c("gridcode","startdate","enddate","pref","city","no_samples",
 names(air2)
 ggplot(data = air2,mapping = aes(x = enddate, y = AvgAirDoseRate) )+
         geom_point()
+#Try other datasets, above only contain on day basis.
+aug2011 <- read_csv("first_vehicle_aug2011.csv")
+dim(aug2011)
+View(aug2011)
+
+# map the Air dose on to the Spatial Points
+library(rgdal)
+pal <- colorNumeric(
+        palette = "Blues",
+        domain = air2$AvgAirDoseRate
+)
+ji <- leaflet()%>%
+        addTiles()%>%
+        addPolygons(data = air2,lng = ~NE_eLong, lat = ~NE_nLat,stroke = FALSE, smoothFactor = 0.2, fillOpacity = 1)
+ji
