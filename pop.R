@@ -1,4 +1,4 @@
-### Does Land Use and population density affect Fukushima Air Dose reduction ?
+#Does Land Use and population density affect Fukushima Air Dose reduction ?
 #Collect relevant data, explore and #Apply different models to test the hypothesis
 library(dplyr)
 library(readr)
