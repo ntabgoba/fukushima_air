@@ -47,5 +47,7 @@ pal <- colorNumeric(
 )
 ji <- leaflet()%>%
         addTiles()%>%
-        addPolygons(data = air2,lng = ~NE_eLong, lat = ~NE_nLat,stroke = FALSE, smoothFactor = 0.2, fillOpacity = 1)
+        addPolygons(data = air2,lng = ~NE_eLong, lat = ~NE_nLat,stroke = FALSE, smoothFactor = 0.2, fillOpacity = 1)%>%
+        addPopups(lat = 37.4211, lng = 141.0328,popup = fukulink,
+                  options = popupOptions(closeButton = TRUE))
 ji
