@@ -1,8 +1,13 @@
 # Ignore csv files,since available on jaea website
 *.csv
+/mina_niho/*.csv/
+/*.csv/
 
 # ignore folder of questions
 /Sato-san/
+*ignore data
+/csv/
+*.pdf
 
 # ignore Mac Finder's metadata file
 .DS_Store
