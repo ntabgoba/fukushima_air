@@ -1,4 +1,6 @@
-#Nihomatsu City Air Dose Analysis
+#Nihomatsu vs Mimanisoma City Average Air Dose Rate Analysis
+
+#Part I: Nihomatsu City,70km to Fukushima Daichi
 library("leaflet")
 library(readr)
 library(dplyr)
@@ -34,9 +36,10 @@ niho_q <- nihom %>%
         mutate(dose_quants = cut2(nihom$AvgAirDoseRate,cuts=c(0.1,0.5,1.0,1.5,2.0,2.5,3.0),levels.mean=TRUE))
 View(niho_q)
 niho_q <- na.omit(niho_q)
+write_csv(niho_q, path = "niho_q.csv")
 #Color function
 iro <- colorFactor(
-        palette = "RdPu",
+        palette = "YlOrRd",
         domain = niho_q$dose_quants
 )
 # Link of Daichi
@@ -50,7 +53,6 @@ max(niho_q$SE_eLong)
 #Nihomatsu Average Air Dose Rate Plot
 niho_plot <- leaflet() %>%
         addTiles()%>%
-        setView(lat = 37.4211, lng = 141.0328, zoom = 11) %>%
         addRectangles(data = niho_q,lng1 = ~SW_eLong, lat1 = ~SW_nLat,lng2 = ~NE_eLong, lat2 = ~NE_nLat,
                       color = ~iro(niho_q$dose_quants))%>%
         addLegend("bottomright", pal = iro, values = niho_q$dose_quants,
@@ -65,21 +67,70 @@ niho_plot
 # which was smaller than the errors of measuring instruments http://emdb.jaea.go.jp/emdb/en/portals/b131/
 
 #plot Nihomatsu geo locations to Average Air Dose
-ggplot(delay, aes(dist, delay)) +
-        geom_point(aes(size = count), alpha = 1/3) +
-        geom_smooth(se = FALSE)
+ggplot(niho_q, aes(daichi_distance,AvgAirDoseRate)) +
+        geom_point() +
+        geom_smooth(se = FALSE)+
+        ggtitle("AvgAirDose against Distance to Daichi Plant")
 
-#Capture discrepancies in variations of the dose
-delays <- not_cancelled %>%
-        group_by(tailnum) %>%
-        summarise(
-                delay = mean(arr_delay, na.rm = TRUE),
-                n = n()
-        )
-ggplot(delays, aes(n, delay)) +
-        geom_point()
 
-# Do a ven diag 
-ggplot(data = diamonds) +
-        geom_bar(mapping = aes(x = cut, fill = cut), width = 1) +
-        coord_polar()
+# Repeat above visualization from a different view 
+ggplot(data = niho_q) +
+        geom_bar(mapping = aes(x = daichi_distance, fill = dose_quants), width = 1)+
+        ggtitle("AvgAirDose Measured Counts against Daichi Distance")
+
+
+
+
+
+
+
+
+
+
+#PART II: Minamisoma City, 30km to Fukushima Daichi
+mina <- read_csv("niho.csv")
+dim(mina)
+View(mina)
+
+#Select Minamisoma City only
+mina$city[mina$city == "Minamisoma city"] <- "minamisoma"
+
+#filter nihomatsu dataset
+mina <- subset(mina, city == "minamisoma")
+dim(mina)
+class(mina)
+summary(mina$AvgAirDoseRate)
+#plot(mina$AvgAirDoseRate)
+
+# Create air dose quantiles that are plot-able,6 categorical variables.
+mina_q <- mina %>%
+        mutate(mina_quants = cut2(mina$AvgAirDoseRate,cuts=seq(0.2,20,2.2),levels.mean=TRUE))
+View(mina_q)
+mina_q <- na.omit(mina_q)
+write_csv(mina_q, path = "mina_q.csv")
+#Color function
+iro <- colorFactor(
+        palette = "BuPu",
+        domain = mina_q$mina_quants
+)
+# Link of Daichi
+fukulink <- paste(sep = "<br/>",
+                  "<br><a href='http://www.tepco.co.jp/en/decommision/index-e.html'>Fukushima Daichi</a></b>",
+                  "Source of radiations"
+)
+
+#Zoom area
+min(mina_q$NE_nLat)
+max(mina_q$SE_eLong)
+#Nihomatsu Average Air Dose Rate Plot
+mina_plot <- leaflet() %>%
+        addTiles()%>%
+        addRectangles(data = mina_q,lng1 = ~SW_eLong, lat1 = ~SW_nLat,lng2 = ~NE_eLong, lat2 = ~NE_nLat,
+                      color = ~iro(mina_q$mina_quants))%>%
+        addLegend("bottomright", pal = iro, values = mina_q$mina_quants,
+                  title = "AvgAirDoseRates",
+                  labFormat = labelFormat(prefix = "µSv/h "),
+                  opacity = 1)%>%
+        addPopups(lat = 37.4211, lng = 141.0328,popup = fukulink,
+                  options = popupOptions(closeButton = TRUE)) 
+mina_plot
