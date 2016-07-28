@@ -50,11 +50,12 @@ niho_q <- na.omit(niho_q)
 write_csv(niho_q, path = "niho_q.csv")
 
 nihom2013_q <- nihom2013 %>%
-        mutate(dose_quants = cut2(nihom2013$AvgAirDoseRate,cuts=c(0.1,0.5,1.0,1.5,2.0,2.5,3.0),levels.mean=TRUE))
+        mutate(dose_quants = cut2(nihom2013$AvgAirDoseRate,cuts=seq(0.06,1.6,0.25),levels.mean=TRUE))
 summary(nihom2013$AvgAirDoseRate)
 summary(niho_q$AvgAirDoseRate)
 ## Visible reduction of Average Air Dose Distribution by half  in Nihomatsu, 
 #Trouble is knowing the distribution of causes of this reduction?
+
 plot(nihom2013$AvgAirDoseRate,niho_q$AvgAirDoseRate)
 
 #Color function
@@ -62,14 +63,16 @@ iro <- colorFactor(
         palette = "YlOrRd",
         domain = niho_q$dose_quants
 )
+iro2013 <- colorFactor(
+        palette = "YlOrRd",
+        domain = nihom2013_q$dose_quants
+)
 # Link of Daichi
 fukulink <- paste(sep = "<br/>",
                   "<br><a href='http://www.tepco.co.jp/en/decommision/index-e.html'>Fukushima Daichi</a></b>",
                   "Source of radiations"
 )
-#Zoom area
-min(niho_q$NE_nLat)
-max(niho_q$SE_eLong)
+
 #Nihomatsu Average Air Dose Rate Plot
 niho_plot <- leaflet() %>%
         addTiles()%>%
@@ -83,6 +86,18 @@ niho_plot <- leaflet() %>%
                   options = popupOptions(closeButton = TRUE)) 
 niho_plot
 
+##niho2013_q
+niho2013_plot <- leaflet() %>%
+        addTiles()%>%
+        addRectangles(data = nihom2013_q,lng1 = ~SW_eLong, lat1 = ~SW_nLat,lng2 = ~NE_eLong, lat2 = ~NE_nLat,
+                      color = ~iro2013(nihom2013_q$dose_quants))%>%
+        addLegend("bottomright", pal = iro2013, values = nihom2013_q$dose_quants,
+                  title = "AvgAirDoseRates",
+                  labFormat = labelFormat(prefix = "µSv/h "),
+                  opacity = 1)%>%
+        addPopups(lat = 37.4211, lng = 141.0328,popup = fukulink,
+                  options = popupOptions(closeButton = TRUE)) 
+niho2013_plot
 #MEXT evaluated the decrease in the air dose rates caused by the decay of cesium during the survey period and it was around 1%, 
 # which was smaller than the errors of measuring instruments http://emdb.jaea.go.jp/emdb/en/portals/b131/
 
@@ -97,11 +112,6 @@ ggplot(niho_q, aes(daichi_distance,AvgAirDoseRate)) +
 ggplot(data = niho_q) +
         geom_bar(mapping = aes(x = daichi_distance, fill = dose_quants), width = 1)+
         ggtitle("AvgAirDose Measured Counts against Daichi Distance")
-
-
-
-
-
 
 
 
