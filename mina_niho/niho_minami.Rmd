@@ -1,17 +1,19 @@
 ---
-title: "niho_minami"
-author: "Jovani Ntabgoba"
+title: "BI Presentation, Miyagi University"
 date: "July 28, 2016"
+author: "by Jovani Ntabgoba"
+
 output: html_document
 ---
-# DOES POPULATION DENSITY AND HUMAN ACTIVITIES AFFECT THE RATE OF REDUCTION OF FUKUSHIMA DAICHI RADIATIONS 
+### DOES POPULATION DENSITY AND HUMAN ACTIVITIES AFFECT THE RATE OF REDUCTION OF FUKUSHIMA DAICHI RADIATIONS? 
 
 This study uses Nihommatsu city and Mimanisoma City as case studies. The two cities are 70km and 30km from Fukushima Daichi Plant respectively.
 
 ![](nihomina.png)
 
-## Part I: Nihomatsu City,70km to Fukushima Daichi
-```{r, include=FALSE}
+### Part I: Nihomatsu City,70km to Fukushima Daichi
+##### 1.1 Required Packages
+```{r, error=FALSE,warning=FALSE, message=FALSE}
 library("leaflet")
 library(readr)
 library(dplyr)
@@ -19,14 +21,17 @@ library(RColorBrewer)
 library(Hmisc)
 ```
 
-**NB:Important Notes from the Nuclear Regulation Authority on**[JAEA website](http://emdb.jaea.go.jp/emdb/en/portals/b131/) 
-        Purposes of this vehicle survey were:
+**NB:Important Notes from the Nuclear Regulation Authority on** [JAEA website](http://emdb.jaea.go.jp/emdb/en/portals/b131/) 
+
+
+> Purposes of this vehicle survey were:
 1. To ascertain the tendency and cause of time change of air dose rates by comparing past vehicle survey data and survey meter data at the height of 1 m above ground as well as "walk survey" data, and 
 2. To contribute to the establishment of **radioactive substances distribution prediction model**.
         MEXT evaluated the decrease in the air dose rates caused by the decay of cesium during the survey period and it was around 1%, which was smaller than the errors of measuring instruments [source](http://emdb.jaea.go.jp/emdb/en/portals/b131/)
-
-#### Loading June 2011 Fukushima Data and selecting Nihomatsu's.
-```{r, include=FALSE}
+        
+        
+##### 1.2 Loading June 2011 Fukushima Data and selecting Nihomatsu's.
+```{r}
 niho <- read_csv("jun_2011_fukushima.csv")
 niho2013 <- read_csv("nov_2013_fukushima.csv")
 # View(niho2013)
@@ -36,7 +41,8 @@ dim(niho)
 class(niho)
 ```
 
-Change to machine readeable column names
+
+##### 1.3 Change to machine readeable column names
 ```{r, warning = FALSE, message = FALSE}
 names(niho) <- c("gridcode","pref","city","gridCenterNorthlat","gridCenterEastlng","gridCenterNorthlatDec",
                  "gridCenterEastlngDec","daichi_distance","no_samples","AvgAirDoseRate",
@@ -51,8 +57,9 @@ niho$city[niho$city == "Nihommatsu city"] <- "nihommatsu"
 niho2013$city[niho2013$city == "Nihommatsu city"] <- "nihommatsu"
 ```
 
-filter nihomatsu dataset
-```{r, include=FALSE}
+
+##### 1.4 Filter nihommatsu observerations
+```{r}
 nihom <- subset(niho, city == "nihommatsu")
 nihom2013 <- subset(niho2013, city == "nihommatsu")
 dim(nihom)
@@ -61,27 +68,25 @@ dim(nihom2013)
 class(nihom)
 ```
 
-Create air dose quantiles that are plot-able,6 categorical variables.
-```{r, include=FALSE}
+
+##### 1.5 Create air dose quantiles that are plot-able,i.e 6 categorical variables.
+```{r}
 niho_q <- nihom %>%
         mutate(dose_quants = cut2(nihom$AvgAirDoseRate,cuts=c(0.1,0.5,1.0,1.5,2.0,2.5,3.0),levels.mean=TRUE))
 # View(niho_q)
 niho_q <- na.omit(niho_q)
 # write_csv(niho_q, path = "niho_q.csv")
-```
-
-```{r, include=FALSE}
 nihom2013_q <- nihom2013 %>%
         mutate(dose_quants = cut2(nihom2013$AvgAirDoseRate,cuts=seq(0.06,1.6,0.25),levels.mean=TRUE))
 summary(nihom2013$AvgAirDoseRate)
 summary(niho_q$AvgAirDoseRate)
 ```
-**Visible reduction of Average Air Dose Distribution by half  in Nihomatsu.** 
-Trouble is knowing the distribution of causes of this reduction?
 
-`plot(nihom2013$AvgAirDoseRate,niho_q$AvgAirDoseRate)`
+* Visible reduction of Average Air Dose Distribution by half  in Nihomatsu. 
+* Trouble is knowing the distribution of causes of this reduction?
 
-#### Color function
+
+##### 1.6 Color function
 ```{r}
 iro <- colorFactor(
         palette = "YlOrRd",
@@ -98,7 +103,8 @@ fukulink <- paste(sep = "<br/>",
 )
 ```
 
-#### Nihomatsu Average Air Dose Rate for 2011
+
+##### 1.7 Nihomatsu Average Air Dose Rate for 2011
 ```{r, warning = FALSE, message = FALSE,}
 niho_plot <- leaflet() %>%
         addTiles()%>%
@@ -113,7 +119,8 @@ niho_plot <- leaflet() %>%
 niho_plot
 ```
 
-#### Nihomatsu Average Air Dose Rate for 2013
+
+##### 1.8 Nihomatsu Average Air Dose Rate for 2013
 ```{r, warning = FALSE, message = FALSE}
 niho2013_plot <- leaflet() %>%
         addTiles()%>%
@@ -129,7 +136,7 @@ niho2013_plot
 ```
 
 
-#### Plot Nihomatsu geo locations to Average Air Dose
+##### 1.9 Nihommatsu 2011, Counts of Measuring Locations per Air Dose Rate
 ```{r, warning = FALSE, message = FALSE,}
 ggplot(niho_q, aes(daichi_distance,AvgAirDoseRate)) +
         geom_point() +
@@ -137,20 +144,21 @@ ggplot(niho_q, aes(daichi_distance,AvgAirDoseRate)) +
         ggtitle("AvgAirDose against Distance to Daichi Plant")
 ```
 
-Repeat above visualization from a different view 
+##### 1.91 Nihommatsu 2011,Counts of Measuring Locations per Air Dose Rate 
 ```{r, warning = FALSE, message = FALSE,}
 ggplot(data = niho_q) +
         geom_bar(mapping = aes(x = daichi_distance, fill = dose_quants), width = 1)+
         ggtitle("AvgAirDose Measured Counts against Daichi Distance")
 ```
 
-## PART II: Minamisoma City, 30km to Fukushima Daichi
+### PART II: Minamisoma City, 30km to Fukushima Daichi
 ```{r, warning = FALSE, message = FALSE}
 mina <- read_csv("niho.csv")
 dim(mina)
 # View(mina)
 ```
 
+##### 2.1 Change to machine readeable column names
 ```{r, warning = FALSE, message = FALSE}
 #Select Minamisoma City only
 mina$city[mina$city == "Minamisoma city"] <- "minamisoma"
@@ -161,7 +169,8 @@ summary(mina$AvgAirDoseRate)
 #plot(mina$AvgAirDoseRate)
 ```
 
-#### Create air dose quantiles that are plot-able,6 categorical variables.
+
+##### 2.2 Create air dose quantiles that are plot-able,6 categorical variables.
 ```{r, warning = FALSE, message = FALSE}
 mina_q <- mina %>%
         mutate(mina_quants = cut2(mina$AvgAirDoseRate,cuts=seq(0.2,20,2.2),levels.mean=TRUE))
@@ -170,7 +179,8 @@ mina_q <- na.omit(mina_q)
 write_csv(mina_q, path = "mina_q.csv")
 ```
 
-#### Color function
+
+##### 2.3 Color function
 ```{r, warning = FALSE, message = FALSE}
 mina_iro <- colorFactor(
         palette = "Set1",
@@ -178,7 +188,8 @@ mina_iro <- colorFactor(
 )
 ```
 
-#### Minamisoma Average Air Dose Rate for 2011
+
+##### 2.4 Minamisoma Average Air Dose Rate for 2011
 ```{r, warning = FALSE, message = FALSE}
 mina_plot <- leaflet() %>%
         addTiles()%>%
@@ -193,7 +204,8 @@ mina_plot <- leaflet() %>%
 mina_plot
 ```
 
-#### Minamisoma AvgAirDose against Distance to Daichi Plant
+
+##### 2.5 Minamisoma AvgAirDose against Distance to Daichi Plant
 ```{r, warning = FALSE, message = FALSE}
 ggplot(mina_q, aes(daichi_distance,AvgAirDoseRate)) +
         geom_point() +
@@ -201,11 +213,41 @@ ggplot(mina_q, aes(daichi_distance,AvgAirDoseRate)) +
         ggtitle("AvgAirDose against Distance to Daichi Plant")
 ```
 
-#### Minamisoma AvgAirDose Measured Counts against Daichi Distance
+
+##### 2.6 Minamisoma 2011, Counts of Measuring Locations per Air Dose Rate
 ```{r, warning = FALSE, message = FALSE}
 ggplot(data = mina_q) +
         geom_bar(mapping = aes(x = daichi_distance, fill = mina_quants), width = 1)+
-        ggtitle("AvgAirDose Measured Counts against Daichi Distance")
+        ggtitle("Counts of Measuring Locations per Air Dose Rate")
 ```
 
-**to be continued**
+
+### PART III: Calculating the Coefficient of Reduction
+##### 3.1 Merging 2011 and 2013 Nihomatsu Data Sets
+```{r, warning = FALSE, message = FALSE}
+library(ggplot2)
+niho_q <- read_csv("niho_q.csv")
+niho2013_q <- read_csv("niho2013.csv")
+names(niho_q) <- c("gridcode","pref","city","gridCenterNorthlat","gridCenterEastlng","gridCenterNorthlatDec",
+                 "gridCenterEastlngDec","daichi_distance","no_samples","AvgAirDoseRate2011",
+                       "NE_nLat","NE_eLong","NW_nLat","NW_eLong",
+                       "SW_nLat","SW_eLong","SE_nLat","SE_eLong")
+names(niho2013_q) <- c("gridcode","pref","city","gridCenterNorthlat","gridCenterEastlng","gridCenterNorthlatDec",
+                     "gridCenterEastlngDec","daichi_distance","no_samples","AvgAirDoseRate2013",
+                     "NE_nLat","NE_eLong","NW_nLat","NW_eLong",
+                     "SW_nLat","SW_eLong","SE_nLat","SE_eLong")
+niho11_13 <- merge(niho_q, niho2013_q, by.x = "gridcode", by.y = "gridcode", all = TRUE)
+```
+
+##### 3.2 Fit a linear model
+```{r, warning = FALSE, message = FALSE}
+fit1 <- lm(AvgAirDoseRate2011~AvgAirDoseRate2013, data = niho11_13)
+summary(fit1)
+ggplot(niho11_13, aes(x = AvgAirDoseRate2011, y = AvgAirDoseRate2013)) + 
+  geom_point() +
+  stat_smooth(method = "lm", col = "red")+
+  ggtitle("Correlationg between Air Dose Rate of 2011 vs of 2013")
+```
+
+
+**End**

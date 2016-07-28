@@ -51,6 +51,7 @@ write_csv(niho_q, path = "niho_q.csv")
 
 nihom2013_q <- nihom2013 %>%
         mutate(dose_quants = cut2(nihom2013$AvgAirDoseRate,cuts=seq(0.06,1.6,0.25),levels.mean=TRUE))
+write_csv(nihom2013_q, path = "niho2013.csv")
 summary(nihom2013$AvgAirDoseRate)
 summary(niho_q$AvgAirDoseRate)
 ## Visible reduction of Average Air Dose Distribution by half  in Nihomatsu, 
