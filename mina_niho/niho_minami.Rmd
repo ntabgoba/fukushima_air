@@ -160,7 +160,7 @@ dim(mina)
 
 ##### 2.1 Change to machine readeable column names
 ```{r, warning = FALSE, message = FALSE}
-#Select Minamisoma City only
+#change Minamisoma city to minamisoma
 mina$city[mina$city == "Minamisoma city"] <- "minamisoma"
 #filter nihomatsu observations only
 mina <- subset(mina, city == "minamisoma")
@@ -237,6 +237,24 @@ names(niho2013_q) <- c("gridcode","pref","city","gridCenterNorthlat","gridCenter
                      "NE_nLat","NE_eLong","NW_nLat","NW_eLong",
                      "SW_nLat","SW_eLong","SE_nLat","SE_eLong")
 niho11_13 <- merge(niho_q, niho2013_q, by.x = "gridcode", by.y = "gridcode", all = TRUE)
+# View(niho11_13)
+# Check if the merged columns are real identical
+niho11_13 <- na.omit(niho11_13)
+identical(niho11_13$gridCenterNorthlat.x,niho11_13$gridCenterNorthlat.y)
+identical(niho11_13$daichi_distance.x,niho11_13$daichi_distance.y)
+identical(niho11_13$no_samples.x,niho11_13$no_samples.y) #2011 and 2013 samples differ,but lets ignore that.
+
+niho11_13 <- select(niho11_13,gridcode,pref.x,city.x,gridCenterNorthlat.x,gridCenterEastlng.x,gridCenterNorthlatDec.x,
+                 gridCenterEastlngDec.x,daichi_distance.x,no_samples.x,AvgAirDoseRate2011,
+                       NE_nLat.x,NE_eLong.x,NW_nLat.x,NW_eLong.x,no_samples.y,AvgAirDoseRate2013)
+# View(niho11_13)
+write_csv(niho11_13,path = "niho11_13")
+#View the change
+plot(x=niho11_13$AvgAirDoseRate2011,type="l",col="red")
+lines(niho11_13$AvgAirDoseRate2013,col="green")
+#Frequency
+hist(niho11_13$AvgAirDoseRate2011,col="green")
+hist(niho11_13$AvgAirDoseRate2013,col="red",add=TRUE)
 ```
 
 ##### 3.2 Fit a linear model
