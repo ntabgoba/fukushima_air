@@ -2,6 +2,7 @@
 *.csv
 /mina_niho/*.csv/
 /*.csv/
+rsconnect/
 
 # ignore folder of questions
 /Sato-san/
