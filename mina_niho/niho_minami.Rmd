@@ -267,10 +267,6 @@ hist(niho11_13$AvgAirDoseRate2013,col="red",add=TRUE)
 fit1 <- lm(AvgAirDoseRate2013~daichi_distance.x, data = niho11_13)
 summary(fit1)
 confint(fit1)
-ggplot(niho11_13, aes(x = AvgAirDoseRate2011, y = AvgAirDoseRate2013)) + 
-  geom_point() +
-  stat_smooth(method = "lm", col = "red")+
-  ggtitle("Correlationg between Air Dose Rate of 2011 vs of 2013")
 ```
 
 
