@@ -247,8 +247,10 @@ identical(niho11_13$no_samples.x,niho11_13$no_samples.y) #2011 and 2013 samples 
 niho11_13 <- select(niho11_13,gridcode,pref.x,city.x,gridCenterNorthlat.x,gridCenterEastlng.x,gridCenterNorthlatDec.x,
                  gridCenterEastlngDec.x,daichi_distance.x,no_samples.x,AvgAirDoseRate2011,
                        NE_nLat.x,NE_eLong.x,NW_nLat.x,NW_eLong.x,no_samples.y,AvgAirDoseRate2013)
-# View(niho11_13)
-write_csv(niho11_13,path = "niho11_13")
+# create new data set (niho11_13)
+write_csv(niho11_13,path = "niho11_13.csv")
+niho11_13 <- read_csv("niho11_13.csv")
+#View(niho11_13)
 #View the change
 plot(x=niho11_13$AvgAirDoseRate2011,type="l",col="red")
 lines(niho11_13$AvgAirDoseRate2013,col="green")
@@ -258,9 +260,13 @@ hist(niho11_13$AvgAirDoseRate2013,col="red",add=TRUE)
 ```
 
 ##### 3.2 Fit a linear model
+**continuous interactions** (two continuous variables) with model $$Y{i} = \beta_{0} + \beta_{1} X_{1i} + \beta_{2} X_{2i} + \beta_{3} X_{1i} X_{2i} + \epsilon_{i}$$
+<br>
+ AvgAirDoseRate2013 = \beta_{0} + \beta_{1} AvgAirDoseRate2011 + \beta_{2} daichi_distance.x + \beta_{3}(AvgAirDoseRate2011)(daichi_distance) + \epsilon_{i}$$
 ```{r, warning = FALSE, message = FALSE}
-fit1 <- lm(AvgAirDoseRate2011~AvgAirDoseRate2013, data = niho11_13)
+fit1 <- lm(AvgAirDoseRate2013~daichi_distance.x, data = niho11_13)
 summary(fit1)
+confint(fit1)
 ggplot(niho11_13, aes(x = AvgAirDoseRate2011, y = AvgAirDoseRate2013)) + 
   geom_point() +
   stat_smooth(method = "lm", col = "red")+
