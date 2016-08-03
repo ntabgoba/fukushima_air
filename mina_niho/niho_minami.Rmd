@@ -6,7 +6,7 @@ author: "by Jovani Ntabgoba"
 output: html_document
 ---
 ### DOES POPULATION DENSITY AND HUMAN ACTIVITIES AFFECT THE RATE OF REDUCTION OF FUKUSHIMA DAICHI RADIATIONS? 
-
+<br>
 This study uses Nihommatsu city and Mimanisoma City as case studies. The two cities are 70km and 30km from Fukushima Daichi Plant respectively.
 
 ![](nihomina.png)
@@ -19,6 +19,7 @@ library(readr)
 library(dplyr)
 library(RColorBrewer)
 library(Hmisc)
+library(ggplot2)
 ```
 
 **NB:Important Notes from the Nuclear Regulation Authority on** [JAEA website](http://emdb.jaea.go.jp/emdb/en/portals/b131/) 
@@ -28,7 +29,7 @@ library(Hmisc)
 1. To ascertain the tendency and cause of time change of air dose rates by comparing past vehicle survey data and survey meter data at the height of 1 m above ground as well as "walk survey" data, and 
 2. To contribute to the establishment of **radioactive substances distribution prediction model**.
         MEXT evaluated the decrease in the air dose rates caused by the decay of cesium during the survey period and it was around 1%, which was smaller than the errors of measuring instruments [source](http://emdb.jaea.go.jp/emdb/en/portals/b131/)
-        
+ <br>       
         
 ##### 1.2 Loading June 2011 Fukushima Data and selecting Nihomatsu's.
 ```{r}
@@ -41,7 +42,7 @@ dim(niho)
 class(niho)
 ```
 
-
+<br>
 ##### 1.3 Change to machine readeable column names
 ```{r, warning = FALSE, message = FALSE}
 names(niho) <- c("gridcode","pref","city","gridCenterNorthlat","gridCenterEastlng","gridCenterNorthlatDec",
@@ -57,7 +58,7 @@ niho$city[niho$city == "Nihommatsu city"] <- "nihommatsu"
 niho2013$city[niho2013$city == "Nihommatsu city"] <- "nihommatsu"
 ```
 
-
+<br>
 ##### 1.4 Filter nihommatsu observerations
 ```{r}
 nihom <- subset(niho, city == "nihommatsu")
@@ -68,7 +69,7 @@ dim(nihom2013)
 class(nihom)
 ```
 
-
+<br>
 ##### 1.5 Create air dose quantiles that are plot-able,i.e 6 categorical variables.
 ```{r}
 niho_q <- nihom %>%
@@ -102,7 +103,7 @@ fukulink <- paste(sep = "<br/>",
                   "Source of radiations"
 )
 ```
-
+<br>
 
 ##### 1.7 Nihomatsu Average Air Dose Rate for 2011
 ```{r, warning = FALSE, message = FALSE,}
@@ -118,7 +119,7 @@ niho_plot <- leaflet() %>%
                   options = popupOptions(closeButton = TRUE)) 
 niho_plot
 ```
-
+<br>
 
 ##### 1.8 Nihomatsu Average Air Dose Rate for 2013
 ```{r, warning = FALSE, message = FALSE}
@@ -134,7 +135,7 @@ niho2013_plot <- leaflet() %>%
                   options = popupOptions(closeButton = TRUE)) 
 niho2013_plot
 ```
-
+<br>
 
 ##### 1.9 Nihommatsu 2011, Counts of Measuring Locations per Air Dose Rate
 ```{r, warning = FALSE, message = FALSE,}
@@ -143,21 +144,21 @@ ggplot(niho_q, aes(daichi_distance,AvgAirDoseRate)) +
         geom_smooth(se = FALSE)+
         ggtitle("AvgAirDose against Distance to Daichi Plant")
 ```
-
+<br>
 ##### 1.91 Nihommatsu 2011,Counts of Measuring Locations per Air Dose Rate 
 ```{r, warning = FALSE, message = FALSE,}
 ggplot(data = niho_q) +
         geom_bar(mapping = aes(x = daichi_distance, fill = dose_quants), width = 1)+
         ggtitle("AvgAirDose Measured Counts against Daichi Distance")
 ```
-
+<br>
 ### PART II: Minamisoma City, 30km to Fukushima Daichi
 ```{r, warning = FALSE, message = FALSE}
 mina <- read_csv("niho.csv")
 dim(mina)
 # View(mina)
 ```
-
+<br>
 ##### 2.1 Change to machine readeable column names
 ```{r, warning = FALSE, message = FALSE}
 #change Minamisoma city to minamisoma
@@ -168,7 +169,7 @@ dim(mina)
 summary(mina$AvgAirDoseRate)
 #plot(mina$AvgAirDoseRate)
 ```
-
+<br>
 
 ##### 2.2 Create air dose quantiles that are plot-able,6 categorical variables.
 ```{r, warning = FALSE, message = FALSE}
@@ -178,7 +179,7 @@ mina_q <- mina %>%
 mina_q <- na.omit(mina_q)
 write_csv(mina_q, path = "mina_q.csv")
 ```
-
+<br>
 
 ##### 2.3 Color function
 ```{r, warning = FALSE, message = FALSE}
@@ -187,7 +188,7 @@ mina_iro <- colorFactor(
         domain = mina_q$mina_quants
 )
 ```
-
+<br>
 
 ##### 2.4 Minamisoma Average Air Dose Rate for 2011
 ```{r, warning = FALSE, message = FALSE}
@@ -203,7 +204,7 @@ mina_plot <- leaflet() %>%
                   options = popupOptions(closeButton = TRUE)) 
 mina_plot
 ```
-
+<br>
 
 ##### 2.5 Minamisoma AvgAirDose against Distance to Daichi Plant
 ```{r, warning = FALSE, message = FALSE}
@@ -212,7 +213,7 @@ ggplot(mina_q, aes(daichi_distance,AvgAirDoseRate)) +
         geom_smooth(se = FALSE)+
         ggtitle("AvgAirDose against Distance to Daichi Plant")
 ```
-
+<br>
 
 ##### 2.6 Minamisoma 2011, Counts of Measuring Locations per Air Dose Rate
 ```{r, warning = FALSE, message = FALSE}
@@ -223,6 +224,7 @@ ggplot(data = mina_q) +
 
 
 ### PART III: Calculating the Coefficient of Reduction
+
 ##### 3.1 Merging 2011 and 2013 Nihomatsu Data Sets
 ```{r, warning = FALSE, message = FALSE}
 library(ggplot2)
@@ -251,23 +253,54 @@ niho11_13 <- select(niho11_13,gridcode,pref.x,city.x,gridCenterNorthlat.x,gridCe
 write_csv(niho11_13,path = "niho11_13.csv")
 niho11_13 <- read_csv("niho11_13.csv")
 #View(niho11_13)
-#View the change
-plot(x=niho11_13$AvgAirDoseRate2011,type="l",col="red")
+#Compare AvgAirDoseRate of 2011&2013
+plot(x=niho11_13$AvgAirDoseRate2011,type="l",col="red",ylab = "Avg Air Dose Rate",xlab = "Frequency of measuring",main = "Compare AvgAirDoseRate of 2011&2013 Nihomatsu")
 lines(niho11_13$AvgAirDoseRate2013,col="green")
+legend("topright", legend = c("AvgAirDoseRate2011","AvgAirDoseRate2013"))
 #Frequency
-hist(niho11_13$AvgAirDoseRate2011,col="green")
-hist(niho11_13$AvgAirDoseRate2013,col="red",add=TRUE)
+
 ```
 
-##### 3.2 Fit a linear model
-**continuous interactions** (two continuous variables) with model $$Y{i} = \beta_{0} + \beta_{1} X_{1i} + \beta_{2} X_{2i} + \beta_{3} X_{1i} X_{2i} + \epsilon_{i}$$
+##### 3.2 Developing a Linear Model
+
+**Linear Model**  $$Y{i} = \beta_{0} + \beta_{1} X_{1i} + \beta_{2} X_{2i} + \beta_{3} X_{1i} X_{2i} + \epsilon_{i}$$
 <br>
- AvgAirDoseRate2013 = \beta_{0} + \beta_{1} AvgAirDoseRate2011 + \beta_{2} daichi_distance.x + \beta_{3}(AvgAirDoseRate2011)(daichi_distance) + \epsilon_{i}$$
+**Mr Sato Tetsuro's Hypothesis**
+ $$AvgAirDoseRate = \beta_{0} + \beta_{1} daichi distance + \beta_{2} popn density + \beta_{3} human activities + \beta_{4}(popn density)(human activities) + \epsilon_{i}$$
+ 
+ **Assumptions**: 
+<ol>
+  <li>The above linear model only looks at 3 parameters hypothesised to affect Air Dose Rate reduction.</li>
+  <li> Effect of Air Dose Rate reduction due to the Time series nature of radiations' half life is <b>assumed constant as measured by MEXT</b>.</li>
+ <br>
+
+##### 3.21 Air Dose Rate Reduction due to Distance to Daichi Plant
 ```{r, warning = FALSE, message = FALSE}
 fit1 <- lm(AvgAirDoseRate2013~daichi_distance.x, data = niho11_13)
 summary(fit1)
 confint(fit1)
 ```
+<br>
 
+##### 3.22 Air Dose Rate Reduction due to Population Density 
 
-**End**
+**Challenge**
+<p> The Air Dose Rate measurements were collected from three sources: </p>
+<ul>
+  <li><b>Cars and Buses with Sensors</b>: Measure Air of 100sq meters from the road</li>
+  <li><b>Un manned Auto Helicopter</b>: Measure from 300m above ground</li>
+  <li><b>Fixed Sensors</b>: Geographically sparsed</li>
+</ul>
+
+<br>
+
+##### 3.23 Air Dose Rate Reduction due to Human Activities 
+
+**Challenge**
+<p> What constitutes Human Activities?: </p>
+<ul>
+  <li><b>Farming</b>: Short life span crops lead to frequent land tilling  </li>
+  <li><b>Cleaned Places</b>: Parks, GolfCourses, Gardens are cleaned too and could reduce radiations</li>
+</ul>
+
+**to be continued**
