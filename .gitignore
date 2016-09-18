@@ -27,3 +27,6 @@ rsconnect/
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
+/fukupop/*.pdf
+/fukupop/*.png
+/fukupop/*.txt

@@ -1,5 +1,5 @@
 ---
-title: "Miyagi University, M.Sc Thesis Report"
+title: "Effect of Population Density and Land Use on Fukushima Air Dose Rate Reduction"
 author:
 - Student; Jovani Ntabgoba
 - Supervisor; Prof Atsushi Togashi
@@ -332,7 +332,7 @@ $$AvgAirDoseRate = \beta_{0} + \beta_{1} popn density + \beta_{2} human activiti
 **Challenge**
 <p> The Air Dose Rate measurements were collected from three sources: </p>
 <ol>
- <li>Cars and Buses with Sensors: Measure Air of 100sq meters from the road</li>
+ <li>Cars and Buses with Sensors: Measure Air of 100m&#0178 from the road</li>
  <li>Un manned Auto Helicopter: Measure from 300m above ground</li>
  <li>Fixed Sensors: Geographically sparsed </li>
 </ol>
