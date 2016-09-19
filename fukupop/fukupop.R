@@ -8,3 +8,7 @@ fukpop$V2[fukpop$V2 == "T000609001"] <- "totalpop"
 fukupop <- setNames(fukpop,c("gridcode","totalpop","male","female","household"))
 View(fukupop)
 fukupop <- fukupop[-1,]
+write.csv(fukupop, file = "fukupop.csv",col.names = TRUE)
+fuk <- read.csv("fukupop.csv")
+View(fuk)
+summary(fuk)
