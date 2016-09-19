@@ -40,3 +40,14 @@ dim(aug2011)
 View(aug2011)
 
 # map the Air dose on to the Spatial Points
+library(rgdal)
+pal <- colorNumeric(
+        palette = "Blues",
+        domain = air2$AvgAirDoseRate
+)
+ji <- leaflet()%>%
+        addTiles()%>%
+        addPolygons(data = air2,lng = ~NE_eLong, lat = ~NE_nLat,stroke = FALSE, smoothFactor = 0.2, fillOpacity = 1)%>%
+        addPopups(lat = 37.4211, lng = 141.0328,popup = fukulink,
+                  options = popupOptions(closeButton = TRUE))
+ji
