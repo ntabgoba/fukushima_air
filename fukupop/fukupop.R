@@ -11,4 +11,10 @@ fukupop <- fukupop[-1,]
 write.csv(fukupop, file = "fukupop.csv",col.names = TRUE)
 fuk <- read.csv("fukupop.csv")
 View(fuk)
+fuk <- fuk[,-1]
+class(fuk)
 summary(fuk)
+sum(fuk$totalpop)
+write.csv(fuk, file = "fuk.csv",row.names = FALSE)
+fuku <- read.csv("fuk.csv")
+View(fuku)
