@@ -96,7 +96,8 @@ MEXT evaluated the decrease in the air dose rates caused by the decay of cesium 
 ```{r}
 niho <- read_csv("jun_2011_fukushima.csv")
 niho2013 <- read_csv("nov_2013_fukushima.csv")
-# View(niho2013)
+View(niho)
+View(niho2013)
 # names(niho)
 dim(niho)
 # head(niho)
@@ -344,6 +345,12 @@ $$AvgAirDoseRate = \beta_{0} + \beta_{1} popn density + \beta_{2} human activiti
 <br>
 </ol>
 <p> Population density and land usage is measured on a 500m&#0178; basis</p>
+```{r, warning = FALSE, message = FALSE}
+fuk_pop <- read_csv("fuk.csv")
+View(fuk_pop)
+
+```
+
 
 #### 2.30 Using other machine learning algorithms
 
