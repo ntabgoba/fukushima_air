@@ -347,6 +347,7 @@ $$AvgAirDoseRate = \beta_{0} + \beta_{1} popn density + \beta_{2} human activiti
 <p> Population density and land usage is measured on a 500m&#0178; basis</p>
 ```{r, warning = FALSE, message = FALSE}
 fuk_pop <- read_csv("fuk.csv")
+
 # Convert mesh gridecode to lat/long
 meshcode_to_latlong <- function (code, loc = "C")
 {
@@ -409,7 +410,29 @@ meshcode_to_latlong <- function (code, loc = "C")
     return (x)
 }
 j <- meshcode_to_latlong(code = 564000463 , loc = "C")
-
+grides <- (fuk_pop[,1])
+head(grides[2])
+grides <- as.matrix(grides)
+grd <- fuk_pop$gridcode
+head(grd);class(grd)
+head(grides)
+class(grides)
+all <- apply(X = grides,MARGIN=c(1,2),FUN = meshcode_to_latlong)
+head(all)
+args(apply)
+trial <- meshcode_to_latlong(code = grides[2])
+trial
+#create the lat/long
+for (i in 1:length(fuk_pop$gridcode) ){
+        lis <- meshcode_to_latlong(code = grides[i], loc = "C")
+        dat <- data.frame(lis[i])
+}
+?data.frame
+#test
+head(lis);length(lis)
+length(fuk_pop$gridcode)
+class(lis);tail(lis)
+head(dat);class(dat);length(dat)
 ```
 
 #### 2.30 Using other machine learning algorithms
