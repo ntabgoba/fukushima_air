@@ -348,9 +348,67 @@ $$AvgAirDoseRate = \beta_{0} + \beta_{1} popn density + \beta_{2} human activiti
 ```{r, warning = FALSE, message = FALSE}
 fuk_pop <- read_csv("fuk.csv")
 View(fuk_pop)
+?table
+# Convert mesh gridecode to lat/long
+meshcode_to_latlong <- function (code, loc = "C"){
+        code <- as.character (code)
+        if (length (grep ( "^ [0-9] {4}", code)) == 1) {# primary mesh or more
+                code12 <- as.numeric (substring (code, 1, 2))
+                code34 <- as.numeric (substring (code, 3, 4))
+                lat_width <- 2/3;
+                long_width <- 1;
+        }
+        else {
+                return (NULL)
+        }
+        
+        if (length (grep ( "^ [0-9] {6}", code)) == 1) {# secondary mesh or more
+                code5 <- as.numeric (substring (code, 5, 5))
+                code6 <- as.numeric (substring (code, 6, 6))
+                lat_width <- lat_width / 8;
+                long_width <- long_width / 8;
+        }
+        
+        if (length (grep ( "^ [0-9] {8}", code)) == 1) {# tertiary mesh
+                code7 <- as.numeric (substring (code, 7, 7))
+                code8 <- as.numeric (substring (code, 8, 8))
+                lat_width <- lat_width / 10;
+                long_width <- long_width / 10;
+        }
+        
+        # Following, seek the southwest corner coordinates.
+        
+        lat <- code12 * 2/3; # primary mesh
+        long <- code34 + 100;
+        
+        if (exists ( "code5") && exists ( "code6")) {# secondary mesh
+                lat <- lat + (code5 * 2/3) / 8;
+                long <- long + code6 / 8;
+        }
+        if (exists ( "code7") && exists ( "code8")) {# tertiary mesh
+                lat <- lat + (code7 * 2/3) / 8/10;
+                long <- long + code8 / 8/10;
+        }
+        
+        if (loc == "C") {# the center of the coordinate
+                lat <- lat + lat_width / 2;
+                long <- long + long_width / 2;
+        }
+        if (length (grep ( "N", loc)) == 1) {# northern end of the coordinates
+                lat <- lat + lat_width;
+        }
+        if (length (grep ( "E", loc) == 1)) {# eastern end of the coordinates
+                long <- long + long_width;
+        }
+        
+        x <- list (as.numeric (lat), as.numeric (long))
+        names (x) <- c ( "lat", "long")
+        
+        return (x)
+}
+jio <- meshcode_to_latlong(code = fuk_pop$gridcode)
 
 ```
-
 
 #### 2.30 Using other machine learning algorithms
 
