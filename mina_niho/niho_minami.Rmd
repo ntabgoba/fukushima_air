@@ -410,20 +410,23 @@ mesh_latlong <- function (mesh, loc = "C")
     return (x)
 }
 j <- mesh_latlong(mesh = 564000463 , loc = "C")
-class(j);print(j)
+class(j);print(j);length(j)
 grides <- fuk_pop[,1]
-head(grides);class(grides);grides[1]
-length(grides)
-length(fuk_pop$gridcode)
-head(grides[,1])
+head(grides);class(grides);length(grides)
+grides[2]
 #create the lat/long
+mylist <- list()
 for (i in 1:length(grides) ){
         lis <- mesh_latlong(mesh = grides[i], loc = "C")
-        dat <- data.frame()
+        mylist[i] <- lis
 }
+res <- as.data.frame(x = mylist,col.names = c("lat","long"))
+View(res)
 head(dat);dim(dat);class(dat);
-head(lis);dim(lis);class(lis);
+head(lis);dim(lis);class(lis);length(lis)
+length(mylist);head(mylist);tail(mylist)
 ?data.frame
+head(grides)
 #test
 head(lis);length(lis)
 length(fuk_pop$gridcode)
