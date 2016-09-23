@@ -438,9 +438,22 @@ df <- as.data.frame(rbindlist(mylist, fill=TRUE))
 df[,"gridcode"] <- grides 
 View(df)
 # merge gridcode and lat/lon
-fuk_pop_latlon <- merge(fuk_pop, df, by.x = "gridcode", by.y = "gridcode", all = TRUE)
-View(fuk_pop_latlon)
-#try plots
+fuk_ll <- merge(fuk_pop, df, by.x = "gridcode", by.y = "gridcode", all = TRUE)
+View(fuk_ll)
+#trial plots
+pop_plot <- leaflet() %>%
+        addTiles()%>%
+        addPolylines(data = fuk_ll,lng = ~long, lat = ~lat)
+pop_plot        
+##leaflet
+?unique
+uniq <- unique(x=df[,-3])
+dim(uniq)
+View(uniq)
+uniq_plot <- leaflet() %>%
+        addTiles()%>%
+        addCircles(data = uniq,lng = ~long, lat = ~lat)
+uniq_plot
 ```
 
 #### 2.30 Using other machine learning algorithms
