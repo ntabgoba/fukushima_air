@@ -418,20 +418,29 @@ grides[2]
 mylist <- list()
 for (i in 1:length(grides) ){
         lis <- mesh_latlong(mesh = grides[i], loc = "C")
-        mylist[i] <- lis
+        mylist[[i]] <- lis
 }
-res <- as.data.frame(x = mylist,col.names = c("lat","long"))
+summary(mylist)
+res <- as.data.frame(mylist)
 View(res)
 head(dat);dim(dat);class(dat);
 head(lis);dim(lis);class(lis);length(lis)
-length(mylist);head(mylist);tail(mylist)
-?data.frame
-head(grides)
+length(mylist);head(mylist);
+
+
 #test
-head(lis);length(lis)
-length(fuk_pop$gridcode)
-class(lis);tail(lis)
-head(dat);class(dat);length(dat)
+df <- data.frame(matrix(unlist(res), nrow=10831, byrow=T))
+View(df)
+df <- ldply (res, data.frame)
+
+library(data.table)
+df <- as.data.frame(rbindlist(mylist, fill=TRUE))
+df[,"gridcode"] <- grides 
+View(df)
+# merge gridcode and lat/lon
+fuk_pop_latlon <- merge(fuk_pop, df, by.x = "gridcode", by.y = "gridcode", all = TRUE)
+View(fuk_pop_latlon)
+#try plots
 ```
 
 #### 2.30 Using other machine learning algorithms
