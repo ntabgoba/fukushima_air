@@ -346,16 +346,16 @@ $$AvgAirDoseRate = \beta_{0} + \beta_{1} popn density + \beta_{2} human activiti
 </ol>
 <p> Population density and land usage is measured on a 500m&#0178; basis</p>
 ```{r, warning = FALSE, message = FALSE}
-fuk_pop <- read_csv("fuk.csv")
-
+fuk_pop <- read.csv("fuk.csv")
+View(fuk_pop)
 # Convert mesh gridecode to lat/long
-meshcode_to_latlong <- function (code, loc = "C")
+mesh_latlong <- function (mesh, loc = "C")
 {
-    code <- as.character(code)
+    mesh <- as.character(mesh)
 
-    if (length(grep("^[0-9]{4}", code)) == 1) { 
-        code12 <- as.numeric(substring(code, 1, 2))
-        code34 <- as.numeric(substring(code, 3, 4))
+    if (length(grep("^[0-9]{4}", mesh)) == 1) { 
+        mesh12 <- as.numeric(substring(mesh, 1, 2))
+        mesh34 <- as.numeric(substring(mesh, 3, 4))
         lat_width  <- 2 / 3;
         long_width <- 1;
     }
@@ -363,31 +363,31 @@ meshcode_to_latlong <- function (code, loc = "C")
         return(NULL)
     }
 
-    if (length(grep("^[0-9]{6}", code)) == 1) { 
-        code5 <- as.numeric(substring(code, 5, 5))
-        code6 <- as.numeric(substring(code, 6, 6))
+    if (length(grep("^[0-9]{6}", mesh)) == 1) { 
+        mesh5 <- as.numeric(substring(mesh, 5, 5))
+        mesh6 <- as.numeric(substring(mesh, 6, 6))
         lat_width  <- lat_width / 8;
         long_width <- long_width / 8;
     }
 
-    if (length(grep("^[0-9]{8}", code)) == 1) { 
-        code7 <- as.numeric(substring(code, 7, 7))
-        code8 <- as.numeric(substring(code, 8, 8))
+    if (length(grep("^[0-9]{8}", mesh)) == 1) { 
+        mesh7 <- as.numeric(substring(mesh, 7, 7))
+        mesh8 <- as.numeric(substring(mesh, 8, 8))
         lat_width  <- lat_width / 10;
         long_width <- long_width / 10;
     }
 
 
-    lat  <- code12 * 2 / 3;          
-    long <- code34 + 100;
+    lat  <- mesh12 * 2 / 3;          
+    long <- mesh34 + 100;
 
-    if (exists("code5") && exists("code6")) {  
-        lat  <- lat  + (code5 * 2 / 3) / 8;
-        long <- long +  code6 / 8;
+    if (exists("mesh5") && exists("mesh6")) {  
+        lat  <- lat  + (mesh5 * 2 / 3) / 8;
+        long <- long +  mesh6 / 8;
     }
-    if (exists("code7") && exists("code8")) {  
-        lat  <- lat  + (code7 * 2 / 3) / 8 / 10;
-        long <- long +  code8 / 8 / 10;
+    if (exists("mesh7") && exists("mesh8")) {  
+        lat  <- lat  + (mesh7 * 2 / 3) / 8 / 10;
+        long <- long +  mesh8 / 8 / 10;
     }
 
     if (loc == "C") {   
@@ -409,24 +409,20 @@ meshcode_to_latlong <- function (code, loc = "C")
 
     return (x)
 }
-j <- meshcode_to_latlong(code = 564000463 , loc = "C")
-grides <- (fuk_pop[,1])
-head(grides[2])
-grides <- as.matrix(grides)
-grd <- fuk_pop$gridcode
-head(grd);class(grd)
-head(grides)
-class(grides)
-all <- apply(X = grides,MARGIN=c(1,2),FUN = meshcode_to_latlong)
-head(all)
-args(apply)
-trial <- meshcode_to_latlong(code = grides[2])
-trial
+j <- mesh_latlong(mesh = 564000463 , loc = "C")
+class(j);print(j)
+grides <- fuk_pop[,1]
+head(grides);class(grides);grides[1]
+length(grides)
+length(fuk_pop$gridcode)
+head(grides[,1])
 #create the lat/long
-for (i in 1:length(fuk_pop$gridcode) ){
-        lis <- meshcode_to_latlong(code = grides[i], loc = "C")
-        dat <- data.frame(lis[i])
+for (i in 1:length(grides) ){
+        lis <- mesh_latlong(mesh = grides[i], loc = "C")
+        dat <- data.frame()
 }
+head(dat);dim(dat);class(dat);
+head(lis);dim(lis);class(lis);
 ?data.frame
 #test
 head(lis);length(lis)
