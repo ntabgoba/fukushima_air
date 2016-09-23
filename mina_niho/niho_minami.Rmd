@@ -422,10 +422,7 @@ for (i in 1:length(grides) ){
 }
 summary(mylist)
 res <- as.data.frame(mylist)
-View(res)
-head(dat);dim(dat);class(dat);
-head(lis);dim(lis);class(lis);length(lis)
-length(mylist);head(mylist);
+
 
 
 #test
@@ -445,15 +442,17 @@ pop_plot <- leaflet() %>%
         addTiles()%>%
         addPolylines(data = fuk_ll,lng = ~long, lat = ~lat)
 pop_plot        
-##leaflet
-?unique
+#remove duplicate lat/lon
 uniq <- unique(x=df[,-3])
-dim(uniq)
-View(uniq)
+
 uniq_plot <- leaflet() %>%
         addTiles()%>%
-        addCircles(data = uniq,lng = ~long, lat = ~lat)
+        addCircles(data = data,lng = ~long, lat = ~lat)
 uniq_plot
+
+data <- subset(fuk_ll, !duplicated(fuk_ll[,7]))
+dim(data)
+View(data)
 ```
 
 #### 2.30 Using other machine learning algorithms
