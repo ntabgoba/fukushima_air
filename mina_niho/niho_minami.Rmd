@@ -447,12 +447,17 @@ uniq <- unique(x=df[,-3])
 
 uniq_plot <- leaflet() %>%
         addTiles()%>%
-        addCircles(data = data,lng = ~long, lat = ~lat)
+        addCircles(data = uniq,lng = ~long, lat = ~lat)
 uniq_plot
 
+# Unique, lat or lon only
 data <- subset(fuk_ll, !duplicated(fuk_ll[,7]))
 dim(data)
 View(data)
+uniq_plot <- leaflet() %>%
+        addTiles()%>%
+        addCircles(data = data,lng = ~long, lat = ~lat)
+uniq_plot
 ```
 
 #### 2.30 Using other machine learning algorithms
