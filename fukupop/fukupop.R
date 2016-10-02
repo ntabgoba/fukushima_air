@@ -16,5 +16,4 @@ class(fuk)
 summary(fuk)
 sum(fuk$totalpop)
 write.csv(fuk, file = "fuk.csv",row.names = FALSE)
-fuku <- read.csv("fuk.csv")
-View(fuku)
+
