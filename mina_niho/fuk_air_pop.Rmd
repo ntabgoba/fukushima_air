@@ -118,7 +118,7 @@ fuk2013_plot
 
 ##### 1.18 Nihommatsu 2011, Counts of Measuring Locations per Air Dose Rate
 ```{r, warning = FALSE, message = FALSE}
-ggplot(niho_q, aes(daichi_distance,AvgAirDoseRate)) +
+ggplot(fuk2011_q, aes(daichi_distance,AvgAirDoseRate)) +
         geom_point() +
         geom_smooth(se = FALSE)+
         ggtitle("AvgAirDose against Distance to Daichi Plant")
@@ -126,110 +126,9 @@ ggplot(niho_q, aes(daichi_distance,AvgAirDoseRate)) +
 
 ##### 1.19 Nihommatsu 2011,Counts of Measuring Locations per Air Dose Rate 
 ```{r, warning = FALSE, message = FALSE}
-ggplot(data = niho_q) +
+ggplot(data = fuk2013_q) +
         geom_bar(mapping = aes(x = daichi_distance, fill = dose_quants), width = 1)+
         ggtitle("AvgAirDose Measured Counts against Daichi Distance")
-```
-
-#### 1.2 Minamisoma City, 30km to Fukushima Daichi
-```{r, warning = FALSE, message = FALSE}
-mina <- read_csv("niho.csv")
-dim(mina)
-```
-
-##### 1.21 Change to machine readeable column names
-```{r, warning = FALSE, message = FALSE}
-#change Minamisoma city to minamisoma
-mina$city[mina$city == "Minamisoma city"] <- "minamisoma"
-#filter nihomatsu observations only
-mina <- subset(mina, city == "minamisoma")
-dim(mina)
-summary(mina$AvgAirDoseRate)
-```
-
-##### 1.22 Create air dose quantiles that are plot-able,6 categorical variables.
-```{r, warning = FALSE, message = FALSE,tidy=TRUE, tidy.opts=list(width.cutoff=60)}
-mina_q <- mina %>%
-        mutate(mina_quants = cut2(mina$AvgAirDoseRate,cuts=seq(0.2,20,2.2),levels.mean=TRUE))
-mina_q <- na.omit(mina_q) #remove NAs
-write_csv(mina_q, path = "mina_q.csv")
-```
-
-##### 1.23 Color function
-```{r, warning = FALSE, message = FALSE}
-mina_iro <- colorFactor(
-        palette = "Set1",
-        domain = mina_q$mina_quants
-)
-```
-
-##### 1.24 Minamisoma Average Air Dose Rate for 2011
-```{r,warning = FALSE, message = FALSE,tidy=TRUE, tidy.opts=list(width.cutoff=60)}
-mina_plot <- leaflet() %>%
-        addTiles()%>%
-        addRectangles(data = mina_q,lng1 = ~SW_eLong, lat1 = ~SW_nLat,
-                      lng2 = ~NE_eLong, lat2 = ~NE_nLat,
-                      color = ~mina_iro(mina_q$mina_quants))%>%
-        addLegend("bottomright", pal = mina_iro, values = mina_q$mina_quants,
-                  title = "AvgAirDoseRate",
-                  labFormat = labelFormat(prefix = "µSv/h "),
-                  opacity = 1)%>%
-        addPopups(lat = 37.4211, lng = 141.0328,popup = fukulink,
-                  options = popupOptions(closeButton = TRUE)) 
-mina_plot
-```
-
-<br>
-
-##### 1.25 Minamisoma AvgAirDose against Distance to Daichi Plant
-```{r, warning = FALSE, message = FALSE}
-ggplot(mina_q, aes(daichi_distance,AvgAirDoseRate)) +
-        geom_point() +
-        geom_smooth(se = FALSE)+
-        ggtitle("AvgAirDose against Distance to Daichi Plant")
-```
-
-##### 1.26 Minamisoma 2011, Counts of Measuring Locations per Air Dose Rate
-```{r, warning = FALSE, message = FALSE}
-ggplot(data = mina_q) +
-        geom_bar(mapping = aes(x = daichi_distance, fill = mina_quants), width = 1)+
-        ggtitle("Counts of Measuring Locations per Air Dose Rate")
-```
-
-## PART II: Calculating the Coefficient of Air Dose Reduction
-
-#### 2.00 Merging 2011 and 2013 Nihomatsu Data Sets
-```{r, warning = FALSE, message = FALSE,tidy=TRUE,fig.width=6, fig.height=4}
-library(ggplot2)
-niho_q <- read_csv("niho_q.csv")
-niho2013_q <- read_csv("niho2013.csv")
-names(niho_q) <- c("gridcode","pref","city","gridCenterNorthlat","gridCenterEastlng",
-                   "gridCenterNorthlatDec","gridCenterEastlngDec","daichi_distance",
-                   "no_samples","AvgAirDoseRate2011","NE_nLat","NE_eLong","NW_nLat","NW_eLong",
-                   "SW_nLat","SW_eLong","SE_nLat","SE_eLong")
-names(niho2013_q) <- c("gridcode","pref","city","gridCenterNorthlat","gridCenterEastlng",
-                       "gridCenterNorthlatDec","gridCenterEastlngDec","daichi_distance",
-                       "no_samples","AvgAirDoseRate2013","NE_nLat","NE_eLong","NW_nLat","NW_eLong",
-                     "SW_nLat","SW_eLong","SE_nLat","SE_eLong")
-niho11_13 <- merge(niho_q, niho2013_q, by.x = "gridcode", by.y = "gridcode", all = TRUE)
-# Check if the merged columns are real identical
-niho11_13 <- na.omit(niho11_13)
-identical(niho11_13$gridCenterNorthlat.x,niho11_13$gridCenterNorthlat.y)
-identical(niho11_13$daichi_distance.x,niho11_13$daichi_distance.y)
-identical(niho11_13$no_samples.x,niho11_13$no_samples.y) #2011 and 2013 samples differ
-
-niho11_13 <- select(niho11_13,gridcode,pref.x,city.x,gridCenterNorthlat.x,
-                    gridCenterEastlng.x,gridCenterNorthlatDec.x,
-                 gridCenterEastlngDec.x,daichi_distance.x,no_samples.x,AvgAirDoseRate2011,
-                       NE_nLat.x,NE_eLong.x,NW_nLat.x,NW_eLong.x,no_samples.y,AvgAirDoseRate2013)
-# create new data set (niho11_13)
-write_csv(niho11_13,path = "niho11_13.csv")
-niho11_13 <- read_csv("niho11_13.csv")
-#Compare AvgAirDoseRate of 2011&2013
-plot(x=niho11_13$AvgAirDoseRate2011,type="l",col="red",ylab = "Avg Air Dose Rate",
-     xlab = "Frequency of measuring",main = "Compare AvgAirDoseRate of 2011&2013 Nihomatsu")
-lines(niho11_13$AvgAirDoseRate2013,col="green")
-legend("topright", legend = c("AvgAirDoseRate2011","AvgAirDoseRate2013"))
 ```
 
 #### 2.10 Air Dose Rate Reduction due to Distance to Fukushima Daichi 
@@ -237,7 +136,7 @@ legend("topright", legend = c("AvgAirDoseRate2011","AvgAirDoseRate2013"))
 $$AvgAirDoseRate = \beta_{0} + \beta_{1} daichi distance + \epsilon_{i}$$
 
 ```{r, warning = FALSE, message = FALSE}
-fit1 <- lm(AvgAirDoseRate2013~daichi_distance.x, data = niho11_13)
+fit1 <- lm(AvgAirDoseRate~daichi_distance, data = fuk2011)
 summary(fit1)
 #Confidence interval
 confint(fit1)
