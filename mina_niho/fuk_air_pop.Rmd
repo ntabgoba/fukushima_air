@@ -69,7 +69,7 @@ fuk2013_q <- fuk2013 %>%
 ```{r,tidy=TRUE, tidy.opts=list(width.cutoff=60)}
 iro <- colorFactor(
         palette = "YlOrRd",
-        domain = fuk$dose_quants
+        domain = fuk2011_q$dose_quants
 )
 iro2013 <- colorFactor(
         palette = "YlOrRd",
@@ -82,37 +82,37 @@ fukulink <- paste(sep = "<br/>",
                   "Source of radiations")
 ```
 
-##### 1.16 Nihomatsu Average Air Dose Rate for 2011
+##### 1.16 Fukushima Average Air Dose Rate for 2011
 ```{r, warning = FALSE, message = FALSE,tidy=TRUE, tidy.opts=list(width.cutoff=60)}
-niho_plot <- leaflet() %>%
+fuk2011_plot <- leaflet() %>%
         addTiles()%>%
-        addRectangles(data = niho_q,lng1 = ~SW_eLong, lat1 = ~SW_nLat,
+        addRectangles(data = fuk2011_q,lng1 = ~SW_eLong, lat1 = ~SW_nLat,
                       lng2 = ~NE_eLong, lat2 = ~NE_nLat,
-                      color = ~iro(niho_q$dose_quants))%>%
-        addLegend("bottomright", pal = iro, values = niho_q$dose_quants,
+                      color = ~iro(fuk2011_q$dose_quants))%>%
+        addLegend("bottomright", pal = iro, values = fuk2011_q$dose_quants,
                   title = "AvgAirDoseRate",
                   labFormat = labelFormat(prefix = "µSv/h "),
                   opacity = 1)%>%
         addPopups(lat = 37.4211, lng = 141.0328,popup = fukulink,
                   options = popupOptions(closeButton = TRUE)) 
-niho_plot
+fuk2011_plot
 ```
 <br>
 
-##### 1.17 Nihomatsu Average Air Dose Rate for 2013
+##### 1.17 Fukushima Average Air Dose Rate for 2013
 ```{r, warning = FALSE, message = FALSE}
-niho2013_plot <- leaflet() %>%
+fuk2013_plot <- leaflet() %>%
         addTiles()%>%
-        addRectangles(data = nihom2013_q,lng1 = ~SW_eLong, lat1 = ~SW_nLat,
+        addRectangles(data = fuk2013_q,lng1 = ~SW_eLong, lat1 = ~SW_nLat,
                       lng2 = ~NE_eLong, lat2 = ~NE_nLat,
-                      color = ~iro2013(nihom2013_q$dose_quants))%>%
-        addLegend("bottomright", pal = iro2013, values = nihom2013_q$dose_quants,
+                      color = ~iro2013(fuk2013_q$dose_quants))%>%
+        addLegend("bottomright", pal = iro2013, values = fuk2013_q$dose_quants,
                   title = "AvgAirDoseRate",
                   labFormat = labelFormat(prefix = "µSv/h "),
                   opacity = 1)%>%
         addPopups(lat = 37.4211, lng = 141.0328,popup = fukulink,
                   options = popupOptions(closeButton = TRUE)) 
-niho2013_plot
+fuk2013_plot
 ```
 <br>
 
