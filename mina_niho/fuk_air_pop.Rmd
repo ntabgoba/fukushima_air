@@ -8,64 +8,9 @@ date: "August 10, 2016"
 output: html_document
 ---
 
-<style type="text/css">
-
-body{ /* Normal  */
-   font-size: 12px;
-}
-td {  /* Table  */
-   font-size: 12px;
-}
-h1 { /* Header 1 */
- font-size: 24px;
- color: DarkBlue;
-}
-h2 { /* Header 2 */
- font-size: 22px;
- color: DarkBlue;
-}
-h3 { /* Header 3 */
- font-size: 18px;
- color: DarkBlue;
-}
-h4 { /* Header 4 */
- font-size: 16px;
- color: DarkBlue;
-}
-h5 { /* Header 5 */
- font-size: 14px;
- color: DarkBlue;
-}
-code.r{ /* Code block */
-  font-size: 12px;
-}
-pre { /* Code block */
-  font-size: 12px
-}
-</style>
-
 ## DOES POPULATION DENSITY AND LAND USE AFFECT THE RATE OF REDUCTION OF FUKUSHIMA DAICHI RADIATIONS? 
 
-This study uses Nihommatsu city and Mimanisoma City as case studies. The two cities are 70km and 30km from Fukushima Daichi Plant respectively.
 
-<br>
-
-![](nihomina.png)
-
-<br>
-
-This research seeks to apply several machine learning algorithms to estimate the rate of reduction of Fukushima Air Dose with respect to variations in population density, land use and distance to Fukushima Nuclear Plant.
-
-**From Linear Model**  $$Y{i} = \beta_{0} + \beta_{1} X_{1i} + \beta_{2} X_{2i} + \beta_{3} X_{1i} X_{2i} + \epsilon_{i}$$
-<br>
-**Hypothesis**
- $$AvgAirDoseRate = \beta_{0} + \beta_{1} daichi distance + \beta_{2} popn density + \beta_{3} human activities + \beta_{4}(popn density)(human activities) + \epsilon_{i}$$
-
- **Assumptions**:
-<ol>
- <li>The above linear model only looks at 3 parameters hypothesised to affect Air Dose Rate reduction.</li>
- <li>Effect of Air Dose Rate reduction due to the Time series nature of radiations' half life is <b>assumed constant as measured by MEXT.</li>
-</ol>
 
 ## Part I: Data Loading, Cleaning and Exploring
 
@@ -82,64 +27,37 @@ library(ggplot2)
 library(formatR)
 ```
 
-**NB:Important Notes from the Nuclear Regulation Authority on** [JAEA website](http://emdb.jaea.go.jp/emdb/en/portals/b131/) 
 
-<p>Purposes of this vehicle survey were:</p>
-<ol>
-<li>To ascertain the tendency and cause of time change of air dose rates by comparing past vehicle survey data and survey meter data at the height of 1 m above ground as well as "walk survey" data, and </li>
-<li> To contribute to the establishment of ** radioactive substances distribution prediction model**.
-MEXT evaluated the decrease in the air dose rates caused by the decay of cesium during the survey period and it was around 1%, which was smaller than the errors of measuring instruments</li>
-[source](http://emdb.jaea.go.jp/emdb/en/portals/b131/)
-</ol>
-<br>
 ##### 1.11 Loading June 2011 and Nov 2013 Fukushima Data and selecting Nihomatsu's.
 ```{r}
-niho <- read_csv("jun_2011_fukushima.csv")
-niho2013 <- read_csv("nov_2013_fukushima.csv")
-View(niho)
-View(niho2013)
-# names(niho)
-dim(niho)
-# head(niho)
-class(niho)
+fuk2011 <- read.csv("jun_2011_fukushima.csv")
+fuk2013 <- read.csv("nov_2013_fukushima.csv")
 ```
 
 ##### 1.12 Change to machine readeable column names
 ```{r, warning = FALSE, message = FALSE,tidy=TRUE, tidy.opts=list(width.cutoff=60)}
-names(niho) <- c("gridcode","pref","city","gridCenterNorthlat","gridCenterEastlng","gridCenterNorthlatDec",
+names(fuk2011) <- c("gridcode","pref","city","gridCenterNorthlat","gridCenterEastlng","gridCenterNorthlatDec",
                  "gridCenterEastlngDec","daichi_distance","no_samples","AvgAirDoseRate",
                        "NE_nLat","NE_eLong","NW_nLat","NW_eLong",
                        "SW_nLat","SW_eLong","SE_nLat","SE_eLong")
-names(niho2013) <- c("gridcode","pref","city","gridCenterNorthlat","gridCenterEastlng","gridCenterNorthlatDec",
+names(fuk2013) <- c("gridcode","pref","city","gridCenterNorthlat","gridCenterEastlng","gridCenterNorthlatDec",
                      "gridCenterEastlngDec","daichi_distance","no_samples","AvgAirDoseRate",
                      "NE_nLat","NE_eLong","NW_nLat","NW_eLong",
                      "SW_nLat","SW_eLong","SE_nLat","SE_eLong")
-#Strip Nihommatsu city,
-niho$city[niho$city == "Nihommatsu city"] <- "nihommatsu"
-niho2013$city[niho2013$city == "Nihommatsu city"] <- "nihommatsu"
+dim(fuk2013); dim(fuk2011)
+max(fuk2013$AvgAirDoseRate);min(fuk2013$AvgAirDoseRate)
+max(fuk2011$AvgAirDoseRate);min(fuk2011$AvgAirDoseRate)
 ```
 
-##### 1.13 Filter nihommatsu observations
-```{r}
-nihom <- subset(niho, city == "nihommatsu")
-nihom2013 <- subset(niho2013, city == "nihommatsu")
-dim(nihom)
-dim(nihom2013)
-class(nihom)
-```
 
 ##### 1.14 Create air dose quantiles that are plot-able,i.e 6 categorical variables.
 ```{r,tidy=TRUE, tidy.opts=list(width.cutoff=60)}
-niho_q <- nihom %>%
-        mutate(dose_quants = cut2(nihom$AvgAirDoseRate,
-                                  cuts=c(0.1,0.5,1.0,1.5,2.0,2.5,3.0),
+fuk2011_q <- fuk2011 %>%
+        mutate(dose_quants = cut2(fuk2011$AvgAirDoseRate,
+                                  cuts=c(0.1,1.0,5.0,15.0,25.0,35.0,45.0),
                                   levels.mean=TRUE))
-niho_q <- na.omit(niho_q)
-# write_csv(niho_q, path = "niho_q.csv")
-nihom2013_q <- nihom2013 %>%
-        mutate(dose_quants = cut2(nihom2013$AvgAirDoseRate,cuts=seq(0.06,1.6,0.25),levels.mean=TRUE))
-summary(nihom2013$AvgAirDoseRate)
-summary(niho_q$AvgAirDoseRate)
+fuk2013_q <- fuk2013 %>%
+        mutate(dose_quants = cut2(fuk2013$AvgAirDoseRate,cuts=c(0.1,1.0,5.0,15.0,25.0,35.0,45.0),levels.mean=TRUE))
 ```
 
 <ul>
@@ -151,11 +69,11 @@ summary(niho_q$AvgAirDoseRate)
 ```{r,tidy=TRUE, tidy.opts=list(width.cutoff=60)}
 iro <- colorFactor(
         palette = "YlOrRd",
-        domain = niho_q$dose_quants
+        domain = fuk$dose_quants
 )
 iro2013 <- colorFactor(
         palette = "YlOrRd",
-        domain = nihom2013_q$dose_quants
+        domain = fuk2013_q$dose_quants
 )
 # Link of Daichi
 fukulink <- paste(sep = "<br/>",
