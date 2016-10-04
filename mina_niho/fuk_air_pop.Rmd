@@ -276,6 +276,16 @@ uniq_plot <- leaflet() %>%
 uniq_plot
 ```
 
+#### Understand population distribution and airdose
+```{}
+plot(fuk2013$AvgAirDoseRate,fuk_ll$totalpop)
+length(fuk2013$AvgAirDoseRate)
+length(fuk_ll$totalpop)
+airdos <- sample(fuk2013$AvgAirDoseRate,10831)
+plot(airdos,fuk_ll$totalpop)
+View(fuk_ll)
+```
+
 #### 2.30 Using other machine learning algorithms
 
 <p> The Fukushima Nuclear Radiations is multi dimensional;</p>
@@ -284,6 +294,7 @@ uniq_plot
 <li> Magnitude of radiation (Becquerel) </li>
 <li> Absorbed dose (Sievert (Sv)) </li>
 <p> The above dimensionalities coupled with distance,population density and land use, create a data set that can be run on extensive machine learning algorithms like Support Vector Machines, Random Forest, Recurrent Neural Networks and more.</p>
+#
 
 **end**
 
