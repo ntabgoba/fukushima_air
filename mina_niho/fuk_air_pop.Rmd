@@ -47,6 +47,7 @@ names(fuk2013) <- c("gridcode","pref","city","gridCenterNorthlat","gridCenterEas
 dim(fuk2013); dim(fuk2011)
 max(fuk2013$AvgAirDoseRate);min(fuk2013$AvgAirDoseRate)
 max(fuk2011$AvgAirDoseRate);min(fuk2011$AvgAirDoseRate)
+View(fuk2013)
 ```
 
 
