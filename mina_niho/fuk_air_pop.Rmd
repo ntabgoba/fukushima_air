@@ -18,7 +18,7 @@ output: html_document
 
 1.11 Required Packages
 ```{r, error=FALSE,warning=FALSE, message=FALSE}
-library("leaflet")
+library(leaflet)
 library(readr)
 library(dplyr)
 library(RColorBrewer)
@@ -252,6 +252,7 @@ df[,"gridcode"] <- grides
 View(df)
 # merge gridcode and lat/lon datasets
 fuk_ll <- merge(fuk_pop, df, by.x = "gridcode", by.y = "gridcode", all = TRUE)
+any(is.na(fuk_ll))
 write.csv(fuk_ll, file = "fuk_ll.csv")
 #trial plots
 pop_plot <- leaflet() %>%
@@ -278,16 +279,15 @@ uniq_plot
 
 #### Understand population distribution and airdose
 ```{}
-plot(fuk2013$AvgAirDoseRate,fuk_ll$totalpop)
-length(fuk2013$AvgAirDoseRate)
-length(fuk_ll$totalpop)
-airdos <- sample(fuk2013$AvgAirDoseRate,10831)
-plot(airdos,fuk_ll$totalpop)
-hist(fuk_ll)
-#remove slashes
-fuk_air_grid2013 <- gsub("_","",fuk2013$gridcode)
+#remove slashes from 2013 AirDose grids
+fuk2013_q$gridcode <- gsub("_","",fuk2013_q$gridcode)
 head(fuk_air_grid2013)
-?gsub
+#change fuk_ll$gridcode to character from integer
+fuk_ll$gridcode <- as.character(fuk_ll$gridcode)
+# Merge fuk_ll and fuk2013_q
+
+fuk_air_pop <- merge(fuk2013_q,fuk_ll, by.x = "gridcode", by.y = "gridcode", all = TRUE)
+View(fuk_air_pop)
 ```
 
 #### 2.30 Using other machine learning algorithms
