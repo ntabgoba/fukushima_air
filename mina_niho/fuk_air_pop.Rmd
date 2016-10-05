@@ -302,5 +302,11 @@ head(fuk_air_grid2013)
 
 **end**
 
-#### 2.40 Looking at airdose rate versus land use
+#### 2.40 LAND USE
+http://nlftp.mlit.go.jp/ksj-e/old/cgi-bin/_download_view.cgi
+Forest and Public Lands mesh
+Land Classification Mesh
+
+Agricultural Areas (surface):A12-60A-48-01.1.zip 10.8MB	
+Agricultural Areas (surface):A12-60A-48-01.0a.zip	10.82MB
 
