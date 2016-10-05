@@ -278,6 +278,12 @@ uniq_plot
 ```
 
 #### Understand population distribution and airdose
+Fuk Population
+5640: 1degree, 40min,80km
+00: 5min,7'30min, 10km
+19: 30s, 45s, 1km
+4: 15s, 22.5s, 500m [1:SW,2:SE,3:NW,4:NE]
+
 ```{}
 #remove slashes from 2013 AirDose grids
 fuk2013_q$gridcode <- gsub("_","",fuk2013_q$gridcode)
