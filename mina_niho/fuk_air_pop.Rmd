@@ -68,6 +68,9 @@ fuk2013dose <- read.csv("fuk2013dose.csv")
 fuk2013dose$gridcode <- gsub("_","",fuk2013dose$gridcode)
 #remove the last character on grides, 250m to 500m
 fuk2013dose$gridcode <- gsub('.{1}$', '', fuk2013dose$gridcode)
+
+sum((pmatch(fuk2013dose$gridcode, fuk_pop$gridcode)))
+
 View(fuk2013dose)
 ```
 
@@ -307,7 +310,7 @@ head(fuk_air_grid2013)
 fuk_ll$gridcode <- as.character(fuk_ll$gridcode)
 # Merge fuk_ll and fuk2013_q
 
-fuk_air_pop <- merge(fuk2013_q,fuk_ll, by.x = "gridcode", by.y = "gridcode", all = TRUE)
+fuk_air_pop <- merge(fuk2013dose,fuk_pop, by.y = "gridcode", all.x )
 View(fuk_air_pop)
 ```
 
