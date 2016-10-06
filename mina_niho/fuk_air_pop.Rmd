@@ -254,6 +254,7 @@ View(df)
 fuk_ll <- merge(fuk_pop, df, by.x = "gridcode", by.y = "gridcode", all = TRUE)
 any(is.na(fuk_ll))
 write.csv(fuk_ll, file = "fuk_ll.csv")
+fuk_ll <- read.csv("fuk_ll.csv")
 #trial plots
 pop_plot <- leaflet() %>%
         addTiles()%>%
