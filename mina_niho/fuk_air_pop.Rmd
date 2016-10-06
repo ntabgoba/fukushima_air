@@ -59,6 +59,16 @@ fuk2011_q <- fuk2011 %>%
                                   levels.mean=TRUE))
 fuk2013_q <- fuk2013 %>%
         mutate(dose_quants = cut2(fuk2013$AvgAirDoseRate,cuts=c(0.1,1.0,5.0,15.0,25.0,35.0,45.0),levels.mean=TRUE))
+
+write.csv(fuk2011_q, file="fuk2011dose.csv",row.names = FALSE)
+write.csv(fuk2013_q, file="fuk2013dose.csv",row.names = FALSE)
+
+fuk2013dose <- read.csv("fuk2013dose.csv")
+#remove the slash on grides
+fuk2013dose$gridcode <- gsub("_","",fuk2013dose$gridcode)
+#remove the last character on grides, 250m to 500m
+fuk2013dose$gridcode <- gsub('.{1}$', '', fuk2013dose$gridcode)
+View(fuk2013dose)
 ```
 
 <ul>
@@ -250,12 +260,16 @@ library(data.table)
 df <- as.data.frame(rbindlist(mylist, fill=TRUE))
 df[,"gridcode"] <- grides 
 View(df)
-# merge gridcode and lat/lon datasets
+# merge gridcode and lat/lon datasets of Fuk population
 fuk_ll <- merge(fuk_pop, df, by.x = "gridcode", by.y = "gridcode", all = TRUE)
-any(is.na(fuk_ll))
-write.csv(fuk_ll, file = "fuk_ll.csv")
-fuk_ll <- read.csv("fuk_ll.csv")
+write.csv(fuk_pop, file="fuk_pop.csv",row.names = FALSE)
+#load new dataset
+fuk_pop <- read.csv("fuk_pop.csv")
+```
+
 #trial plots
+```{r}
+
 pop_plot <- leaflet() %>%
         addTiles()%>%
         addPolylines(data = fuk_ll,lng = ~long, lat = ~lat)
