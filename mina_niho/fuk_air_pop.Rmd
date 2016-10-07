@@ -268,6 +268,7 @@ fuk_ll <- merge(fuk_pop, df, by.x = "gridcode", by.y = "gridcode", all = TRUE)
 write.csv(fuk_pop, file="fuk_pop.csv",row.names = FALSE)
 #load new dataset
 fuk_pop <- read.csv("fuk_pop.csv")
+View(fuk_pop)
 ```
 
 #trial plots
@@ -296,6 +297,7 @@ uniq_plot
 ```
 
 #### Understand population distribution and airdose
+Population link:http://www.e-stat.go.jp/SG1/estat/toukeiChiri.do?method=init
 Fuk Population
 5640: 1degree, 40min,80km
 00: 5min,7'30min, 10km
