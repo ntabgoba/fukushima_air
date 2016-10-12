@@ -47,7 +47,7 @@ names(fuk2013) <- c("gridcode","pref","city","gridCenterNorthlat","gridCenterEas
 dim(fuk2013); dim(fuk2011)
 max(fuk2013$AvgAirDoseRate);min(fuk2013$AvgAirDoseRate)
 max(fuk2011$AvgAirDoseRate);min(fuk2011$AvgAirDoseRate)
-View(fuk2013)
+
 ```
 
 
@@ -71,7 +71,6 @@ fuk2013dose$gridcode <- gsub('.{1}$', '', fuk2013dose$gridcode)
 
 sum((pmatch(fuk2013dose$gridcode, fuk_pop$gridcode)))
 
-View(fuk2013dose)
 ```
 
 <ul>
@@ -178,7 +177,7 @@ $$AvgAirDoseRate = \beta_{0} + \beta_{1} popn density + \beta_{2} human activiti
 <p> Population density and land usage is measured on a 500m&#0178; basis</p>
 ```{r, warning = FALSE, message = FALSE}
 fuk_pop <- read.csv("fuk.csv")
-View(fuk_pop)
+(fuk_pop)
 # Convert mesh gridecode to lat/long
 mesh_latlong <- function (mesh, loc = "C")
 {
@@ -262,13 +261,13 @@ res <- as.data.frame(mylist)
 library(data.table)
 df <- as.data.frame(rbindlist(mylist, fill=TRUE))
 df[,"gridcode"] <- grides 
-View(df)
+
 # merge gridcode and lat/lon datasets of Fuk population
 fuk_ll <- merge(fuk_pop, df, by.x = "gridcode", by.y = "gridcode", all = TRUE)
 write.csv(fuk_pop, file="fuk_pop.csv",row.names = FALSE)
 #load new dataset
 fuk_pop <- read.csv("fuk_pop.csv")
-View(fuk_pop)
+
 ```
 
 #trial plots
@@ -289,7 +288,7 @@ uniq_plot
 # Unique, lat or lon only
 data <- subset(fuk_ll, !duplicated(fuk_ll[,7]))
 dim(data)
-View(data)
+
 uniq_plot <- leaflet() %>%
         addTiles()%>%
         addCircles(data = data,lng = ~long, lat = ~lat)
@@ -313,7 +312,7 @@ fuk_ll$gridcode <- as.character(fuk_ll$gridcode)
 # Merge fuk_ll and fuk2013_q
 
 fuk_air_pop <- merge(fuk2013dose,fuk_pop, by.y = "gridcode", all.x )
-View(fuk_air_pop)
+
 ```
 
 #### 2.30 Using other machine learning algorithms
