@@ -60,17 +60,14 @@ fuk2011_q <- fuk2011 %>%
 fuk2013_q <- fuk2013 %>%
         mutate(dose_quants = cut2(fuk2013$AvgAirDoseRate,cuts=c(0.1,1.0,5.0,15.0,25.0,35.0,45.0),levels.mean=TRUE))
 
-write.csv(fuk2011_q, file="fuk2011dose.csv",row.names = FALSE)
-write.csv(fuk2013_q, file="fuk2013dose.csv",row.names = FALSE)
+# write.csv(fuk2011_q, file="fuk2011dose.csv",row.names = FALSE)
+# write.csv(fuk2013_q, file="fuk2013dose.csv",row.names = FALSE)
 
 fuk2013dose <- read.csv("fuk2013dose.csv")
 #remove the slash on grides
 fuk2013dose$gridcode <- gsub("_","",fuk2013dose$gridcode)
 #remove the last character on grides, 250m to 500m
 fuk2013dose$gridcode <- gsub('.{1}$', '', fuk2013dose$gridcode)
-
-sum((pmatch(fuk2013dose$gridcode, fuk_pop$gridcode)))
-
 ```
 
 <ul>
@@ -177,7 +174,6 @@ $$AvgAirDoseRate = \beta_{0} + \beta_{1} popn density + \beta_{2} human activiti
 <p> Population density and land usage is measured on a 500m&#0178; basis</p>
 ```{r, warning = FALSE, message = FALSE}
 fuk_pop <- read.csv("fuk.csv")
-(fuk_pop)
 # Convert mesh gridecode to lat/long
 mesh_latlong <- function (mesh, loc = "C")
 {
@@ -243,7 +239,6 @@ mesh_latlong <- function (mesh, loc = "C")
 # class(j);print(j);length(j)
 grides <- fuk_pop[,1]
 head(grides);class(grides);length(grides)
-grides[2]
 #create the lat/long
 mylist <- list()
 for (i in 1:length(grides) ){
@@ -306,7 +301,6 @@ Fuk Population
 ```{}
 #remove slashes from 2013 AirDose grids
 fuk2013_q$gridcode <- gsub("_","",fuk2013_q$gridcode)
-head(fuk_air_grid2013)
 #change fuk_ll$gridcode to character from integer
 fuk_ll$gridcode <- as.character(fuk_ll$gridcode)
 # Merge fuk_ll and fuk2013_q
@@ -323,7 +317,7 @@ fuk_air_pop <- merge(fuk2013dose,fuk_pop, by.y = "gridcode", all.x )
 <li> Magnitude of radiation (Becquerel) </li>
 <li> Absorbed dose (Sievert (Sv)) </li>
 <p> The above dimensionalities coupled with distance,population density and land use, create a data set that can be run on extensive machine learning algorithms like Support Vector Machines, Random Forest, Recurrent Neural Networks and more.</p>
-#
+
 
 **end**
 
