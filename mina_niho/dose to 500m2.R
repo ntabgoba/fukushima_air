@@ -20,25 +20,37 @@ dose_mesh500 <- function (gridecode)
                 long_width <- 1;
         }
 }
-?grep
-?paste
-gi <- fuk2013dose$gridcode[1:5]
-gridelt1 <- substr(fuk2013dose$gridcode, 11,11)
-gridelt1
-gridelt2 <- substr(fuk2013dose$gridcode,12,12)
-gridelt2
 
+gridelt1 <- substr(fuk2013dose$gridcode, 11,11)
+length(gridelt1); class(gridelt1)
+gridelt2 <- substr(fuk2013dose$gridcode,12,12)
+length(gridelt2);class(gridelt2)
+
+gridelt2 <- as.numeric(gridelt2)
+gridelt1 <- as.numeric(gridelt1)
+gridem <- substr(fuk2013dose$gridcode, 1,10)
+mycode <- list()
+for (i in 1:length(gridelt1)){
+        if((gridelt1[i] >= 5) &  (gridelt1[i] <= 9) & (gridelt2[i] <= 5)){
+                mycode[[i]] <- paste0(gridem[i],3)
+                }
+        else if((gridelt1[i] >= 5) &  (gridelt1[i] <= 9) & (gridelt2[i] >= 5) &  (gridelt2[i] <= 9)){
+                mycode[[i]] <- paste0(gridem[i],4)
+        }
+        else if((gridelt1[i] <= 5) & (gridelt2[i] <= 5)){
+                mycode[[i]] <- paste0(gridem[i],1)
+        }
+        else ((gridelt1[i] <= 5) &  (gridelt1[i] <= 9) & (gridelt2[i] >= 5) &  (gridelt2[i] <= 9)){
+                mycode[[i]] <- paste0(gridem[i],3)
+        }
+}
+mycode <- na.omit(mycode)
+mycode
+class(mycode);length(mycode) 
+fuk2013dose$gridcode[1:20]
+
+###
 is.between <- function(x, a, b) {
         x > a & x < b
 }
-gridelt2 <- as.numeric(gridelt2)
-gridelt1 <- as.numeric(gridelt1)
-for (i in 1:length(gridelt1)){
-        for (j in 1:length(gridelt2)){
-                if((gridelt1[i] - 6)  *  (10 - gridelt1[i]) > 0 & (gridelt2[j] <= 5)){
-                        paste(gi,3)
-                }
-        }
-}
-gridekode 
-warnings()
+###
