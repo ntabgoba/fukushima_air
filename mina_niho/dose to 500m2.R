@@ -33,22 +33,21 @@ mycode <- list()
 for (i in 1:length(gridelt1)){
         if((gridelt1[i] >= 5) &  (gridelt1[i] <= 9) & (gridelt2[i] <= 5)){
                 mycode[[i]] <- paste0(gridem[i],3)
-                }
-        else if((gridelt1[i] >= 5) &  (gridelt1[i] <= 9) & (gridelt2[i] >= 5) &  (gridelt2[i] <= 9)){
+        }
+        if((gridelt1[i] >= 5) &  (gridelt1[i] <= 9) & (gridelt2[i] >= 5) &  (gridelt2[i] <= 9)){
                 mycode[[i]] <- paste0(gridem[i],4)
         }
-        else if((gridelt1[i] <= 5) & (gridelt2[i] <= 5)){
+        if((gridelt1[i] <= 5) & (gridelt2[i] <= 5)){
                 mycode[[i]] <- paste0(gridem[i],1)
         }
-        else ((gridelt1[i] <= 5) &  (gridelt1[i] <= 9) & (gridelt2[i] >= 5) &  (gridelt2[i] <= 9)){
-                mycode[[i]] <- paste0(gridem[i],3)
+        if ((gridelt1[i] <= 5) &  (gridelt1[i] <= 9) & (gridelt2[i] >= 5) &  (gridelt2[i] <= 9)){
+                mycode[[i]] <- paste0(gridem[i],2)
         }
 }
-mycode <- na.omit(mycode)
-mycode
-class(mycode);length(mycode) 
-fuk2013dose$gridcode[1:20]
 
+class(mycode);length(mycode) 
+#test action
+mycode[1:30]
 ###
 is.between <- function(x, a, b) {
         x > a & x < b
