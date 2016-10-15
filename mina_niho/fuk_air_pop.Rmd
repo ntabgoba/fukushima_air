@@ -331,3 +331,19 @@ Land Classification Mesh
 Agricultural Areas (surface):A12-60A-48-01.1.zip 10.8MB	
 Agricultural Areas (surface):A12-60A-48-01.0a.zip	10.82MB
 
+### Airdose change to 500m2
+mycode <- list()
+for (i in 1:length(gridelt1)){
+        if((gridelt1[i] >= 5) &  (gridelt1[i] <= 9) & (gridelt2[i] <= 5)){
+                mycode[[i]] <- paste0(gridem[i],3)
+        }
+        if((gridelt1[i] >= 5) &  (gridelt1[i] <= 9) & (gridelt2[i] >= 5) &  (gridelt2[i] <= 9)){
+                mycode[[i]] <- paste0(gridem[i],4)
+        }
+        if((gridelt1[i] <= 5) & (gridelt2[i] <= 5)){
+                mycode[[i]] <- paste0(gridem[i],1)
+        }
+        if ((gridelt1[i] <= 5) &  (gridelt1[i] <= 9) & (gridelt2[i] >= 5) &  (gridelt2[i] <= 9)){
+                mycode[[i]] <- paste0(gridem[i],2)
+        }
+}
