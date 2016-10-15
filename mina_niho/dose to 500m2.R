@@ -6,20 +6,7 @@ class(fuk2013dose$gridcode)
 fuk2013dose$gridcode <- as.character(fuk2013dose$gridcode)
 fuk2013dose$gridcode <- gsub("_","",fuk2013_q$gridcode)
 
-dose_mesh500 <- function (gridecode)
-{
-        a <- as.numeric(substr(gridecode, 11,11))
-        b <- as.numeric(substr(gridecode,12,12))
-        if((a - 6)  *  (10 - a) > 0 & (b <= 5)){
-                gridecode <- paste(gridcode,3)
-        }
-        if (gridelt1 > 5 & gridelt1 < 9 ) { 
-                mesh12 <- as.numeric(substring(mesh, 1, 2))
-                mesh34 <- as.numeric(substring(mesh, 3, 4))
-                lat_width  <- 2 / 3;
-                long_width <- 1;
-        }
-}
+
 
 gridelt1 <- substr(fuk2013dose$gridcode, 11,11)
 length(gridelt1); class(gridelt1)
@@ -47,9 +34,4 @@ for (i in 1:length(gridelt1)){
 
 class(mycode);length(mycode) 
 #test action
-mycode[1:30]
-###
-is.between <- function(x, a, b) {
-        x > a & x < b
-}
-###
+fuk2013dose$gridcode <- mycode

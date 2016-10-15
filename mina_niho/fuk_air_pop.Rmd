@@ -262,7 +262,9 @@ fuk_ll <- merge(fuk_pop, df, by.x = "gridcode", by.y = "gridcode", all = TRUE)
 write.csv(fuk_pop, file="fuk_pop.csv",row.names = FALSE)
 #load new dataset
 fuk_pop <- read.csv("fuk_pop.csv")
-
+View(fuk_pop)
+no_unique <- length(unique(fuk_pop$gridcode))
+no_unique
 ```
 
 #trial plots
