@@ -40,7 +40,7 @@ length(unique_grides)
 length(unique(fuk2013dose$gridcode))  #16233
 length(unique(fuk_pop$gridcode)) #10831
 # Look for differing grides
-
+df$V3 <- df$V1 - df$V2
 
 
 
