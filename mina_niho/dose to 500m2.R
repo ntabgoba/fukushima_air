@@ -1,11 +1,9 @@
 # convert Fukushima Airdose from 10 codes to 9codes
 # Dose is 100m2 i.e third order mesh/10x10, Popn is 500m2 i.e third order mesh/4(SW,SE,NW,NE)
 fuk2013dose <- read.csv("fuk2013dose.csv")
-View(fuk2013dose)
-class(fuk2013dose$gridcode)
 #Change to character
 fuk2013dose$gridcode <- as.character(fuk2013dose$gridcode)
-fuk2013dose$gridcode <- gsub("_","",fuk2013_q$gridcode)
+#fuk2013dose$gridcode <- gsub("_","",fuk2013_q$gridcode)
 # subset last 2 digits
 gridelt1 <- substr(fuk2013dose$gridcode, 11,11)
 gridelt2 <- substr(fuk2013dose$gridcode,12,12)
@@ -31,9 +29,20 @@ for (i in 1:length(gridelt1)){
         }
 }
 
-class(mycode);length(mycode) 
-mycode[1:50]
 # create the new var
 fuk2013dose$gridcode <- mycode
+View(fuk2013dose)
+fuk2013dose$gridcode[1:3]
+unique_grides <- unique(fuk2013dose$gridcode)
+length(unique_grides)
+
+# Check for compatibility with the Fuk Population data
+length(unique(fuk2013dose$gridcode))  #16233
+length(unique(fuk_pop$gridcode)) #10831
+# Look for differing grides
+
+
+
+
 
 
