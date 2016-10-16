@@ -3,32 +3,18 @@
 fuk2013dose <- read.csv("fuk2013dose.csv")
 View(fuk2013dose)
 class(fuk2013dose$gridcode)
+#Change to character
 fuk2013dose$gridcode <- as.character(fuk2013dose$gridcode)
 fuk2013dose$gridcode <- gsub("_","",fuk2013_q$gridcode)
-
-dose_mesh500 <- function (gridecode)
-{
-        a <- as.numeric(substr(gridecode, 11,11))
-        b <- as.numeric(substr(gridecode,12,12))
-        if((a - 6)  *  (10 - a) > 0 & (b <= 5)){
-                gridecode <- paste(gridcode,3)
-        }
-        if (gridelt1 > 5 & gridelt1 < 9 ) { 
-                mesh12 <- as.numeric(substring(mesh, 1, 2))
-                mesh34 <- as.numeric(substring(mesh, 3, 4))
-                lat_width  <- 2 / 3;
-                long_width <- 1;
-        }
-}
-
+# subset last 2 digits
 gridelt1 <- substr(fuk2013dose$gridcode, 11,11)
-length(gridelt1); class(gridelt1)
 gridelt2 <- substr(fuk2013dose$gridcode,12,12)
-length(gridelt2);class(gridelt2)
-
+# change to numeric 
 gridelt2 <- as.numeric(gridelt2)
 gridelt1 <- as.numeric(gridelt1)
+#subset first 10 digits
 gridem <- substr(fuk2013dose$gridcode, 1,10)
+#create a list for new var
 mycode <- list()
 for (i in 1:length(gridelt1)){
         if((gridelt1[i] >= 5) &  (gridelt1[i] <= 9) & (gridelt2[i] <= 5)){
@@ -46,5 +32,8 @@ for (i in 1:length(gridelt1)){
 }
 
 class(mycode);length(mycode) 
-#test action
+mycode[1:50]
+# create the new var
 fuk2013dose$gridcode <- mycode
+
+
