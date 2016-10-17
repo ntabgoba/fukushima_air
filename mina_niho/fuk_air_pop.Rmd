@@ -251,6 +251,7 @@ View(res)
 #test
 # df <- data.frame(matrix(unlist(res), nrow=10831, byrow=T))
 # df <- ldply (res, data.frame)
+
 library(data.table)
 df <- as.data.frame(rbindlist(mylist, fill=TRUE))
 df[,"gridcode"] <- grides 

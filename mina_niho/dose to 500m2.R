@@ -1,6 +1,7 @@
 # convert Fukushima Airdose from 10 codes to 9codes
 # Dose is 100m2 i.e third order mesh/10x10, Popn is 500m2 i.e third order mesh/4(SW,SE,NW,NE)
 fuk2013dose <- read.csv("fuk2013dose.csv")
+fuk_pll <- read.csv("fuk_ll")
 #Change to character
 fuk2013dose$gridcode <- as.character(fuk2013dose$gridcode)
 #fuk2013dose$gridcode <- gsub("_","",fuk2013_q$gridcode)
