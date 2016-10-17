@@ -247,14 +247,12 @@ for (i in 1:length(grides) ){
 }
 
 res <- as.data.frame(mylist)
-
-
+View(res)
 #test
 # df <- data.frame(matrix(unlist(res), nrow=10831, byrow=T))
 # df <- ldply (res, data.frame)
-
 library(data.table)
-df <- as.data.frame(rbind(mylist, fill=TRUE))
+df <- as.data.frame(rbindlist(mylist, fill=TRUE))
 df[,"gridcode"] <- grides 
 View(df)
 # merge gridcode and lat/lon datasets of Fuk population
