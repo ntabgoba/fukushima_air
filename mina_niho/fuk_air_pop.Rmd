@@ -254,9 +254,9 @@ res <- as.data.frame(mylist)
 # df <- ldply (res, data.frame)
 
 library(data.table)
-df <- as.data.frame(rbindlist(mylist, fill=TRUE))
+df <- as.data.frame(rbind(mylist, fill=TRUE))
 df[,"gridcode"] <- grides 
-
+View(df)
 # merge gridcode and lat/lon datasets of Fuk population
 fuk_ll <- merge(fuk_pop, df, by.x = "gridcode", by.y = "gridcode", all = TRUE)
 write.csv(fuk_pop, file="fuk_pop.csv",row.names = FALSE)
