@@ -57,7 +57,14 @@ gride_matcher <- function(mesh1,mesh2){
         }
 }
 
-
+matched_grides <- gride_matcher(mesh1=unique.pop_gride, mesh2 = unique.air_gride)
+length(matched_grides)
+# Look for differing grides
+popAir_gride <- data.frame(a = fuk2013dose$gridcode,b = fuk_pop$gridcode)
+View(popAir_gride)
+df <- data.frame(b = fuk_pop$gridcode,a = fuk2013dose$gridv)
+View(df)
+df$V3 <- df$V1 - df$V2
 ?cbind
 ?data.frame
 
