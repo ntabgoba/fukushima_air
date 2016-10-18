@@ -51,15 +51,12 @@ unique.pop_gride <- unique(fuk_pll$gridcode)
 unique.air_gride <- unique(fuk2013dose$gridcode)
 #measure length of the unique grides
 length(intersect(fuk_pop$gridcode,fuk2013dose$gridcode)) #6232
-length(setdiff(fuk_pop$gridcode,fuk2013dose$gridcode)) #4599
 length(setdiff(as.character(unique.pop_gride),unique.air_gride)) # 4599
 length(setequal(as.character(unique.pop_gride),unique.air_gride)) #1  #6232(merged dataset length)
 
 gride.intersect <- intersect(fuk_pop$gridcode,fuk2013dose$gridcode)
 class(gride.intersect); length(gride.intersect)
 gride.intersect[1]
-
-
 
 
 # gride_matcher function
@@ -95,7 +92,7 @@ library(ggplot2)
 popAir_merged <- popAir_merge %>%
         mutate(pop_quants = (cut2(popAir_merge$totalpop,cuts=c(10,100,500,1000,1500,2000,2500,3000),levels.mean=TRUE,digits=0)))
 
-
+write.csv(popAir_merged, file="popAir_merged.csv",row.names = FALSE)
 #plots
 iro <- colorFactor(
         palette = "YlOrRd",
@@ -120,3 +117,6 @@ popAir_plot <- leaflet() %>%
         addPopups(lat = 37.4211, lng = 141.0328,popup = fukulink,
                   options = popupOptions(closeButton = TRUE)) 
 popAir_plot
+
+# predictions
+
