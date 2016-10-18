@@ -39,13 +39,20 @@ View(fuk2013dose)
 # Check for compatibility with the Fuk Population data
 length(unique(fuk2013dose$gridcode))  #16233
 length(unique(fuk_pop$gridcode)) #10831
-class(fuk2013dose$gridcode)  #16233
-length(intersect(fuk_pop$gridcode,fuk2013dose$gridcode))
+
 #pick unique grides available to both only.
 unique.pop_gride <- unique(fuk_pll$gridcode) 
 unique.air_gride <- unique(fuk2013dose$gridcode)
+#measure length of the unique grides
+length(intersect(fuk_pop$gridcode,fuk2013dose$gridcode)) #6232
+length(setdiff(fuk_pop$gridcode,fuk2013dose$gridcode)) #4599
+length(setdiff(as.character(unique.pop_gride),unique.air_gride)) # 4599
+length(setequal(as.character(unique.pop_gride),unique.air_gride)) #1
 
-class(fuk_pll$gridcode)
+gride.intersect <- intersect(fuk_pop$gridcode,fuk2013dose$gridcode)
+class(gride.intersect); length(gride.intersect)
+gride.intersect[1]
+# gride_matcher function
 meshes <- list()
 gride_matcher <- function(mesh1,mesh2){
         mesh1 <- as.numeric(as.character(mesh2))
@@ -60,14 +67,14 @@ gride_matcher <- function(mesh1,mesh2){
 
 matched_grides <- gride_matcher(mesh1=unique.pop_gride, mesh2 = unique.air_gride)
 length(matched_grides); class(matched_grides)
-# Look for differing grides
-popAir_gride <- data.frame(a = fuk2013dose$gridcode,b = fuk_pop$gridcode)
-View(popAir_gride)
-df <- data.frame(b = fuk_pop$gridcode,a = fuk2013dose$gridv)
-View(df)
-df$V3 <- df$V1 - df$V2
-?cbind
-?data.frame
 
+#### create datasets for unique grides
+library(dplyr)
+unique.grides.pop <- filter(fuk_pll, gridcode == unique.pop_gride)
+View(unique.grides.pop)
+unique.grides.air <- mutate(fuk2013dose, unique.air_gride)
+View(unique.grides.air)
+unique.air_gride
 
+unique.pop_gride
 
