@@ -36,21 +36,28 @@ for (i in 1:length(gridelt1)){
 fuk2013dose$gridcode <- mycode
 fuk2013dose$gridcode <- gsub("_","",fuk2013dose$gridcode)
 View(fuk2013dose)
-fuk2013dose$gridcode[1:3]
-
 # Check for compatibility with the Fuk Population data
 length(unique(fuk2013dose$gridcode))  #16233
 length(unique(fuk_pop$gridcode)) #10831
 class(fuk2013dose$gridcode)  #16233
-class(fuk_pop$gridcode)
-fuk_pop$gridcode <- as.vector(fuk_pop$gridcode)
-fuk2013dose$gridv <- as.vector(fuk2013dose$gridcode)
-# Look for differing grides
-popAir_gride <- data.frame(a = fuk2013dose$gridcode,b = fuk_pop$gridcode)
-View(popAir_gride)
-df <- data.frame(b = fuk_pop$gridcode,a = fuk2013dose$gridv)
-View(df)
-df$V3 <- df$V1 - df$V2
+#pick unique grides available to both only.
+unique.pop_gride <- unique(fuk_pll$gridcode) 
+unique.air_gride <- unique(fuk2013dose$gridcode)
+
+class(fuk_pll$gridcode)
+meshes <- list()
+gride_matcher <- function(mesh1,mesh2){
+        mesh1 <- as.numeric(as.character(mesh2))
+        for (i in 1:length(mesh1)){
+                for (j in 1:length(mesh2)){
+                        if (mesh1[i] == mesh2[j]){
+                                meshes <- mesh1[i]
+                        }else return(NULL)
+                }
+        }
+}
+
+
 ?cbind
 ?data.frame
 
