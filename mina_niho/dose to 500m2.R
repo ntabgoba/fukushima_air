@@ -40,6 +40,7 @@ View(fuk2013dose)
 length(unique(fuk2013dose$gridcode))  #16233
 length(unique(fuk_pop$gridcode)) #10831
 class(fuk2013dose$gridcode)  #16233
+length(intersect(fuk_pop$gridcode,fuk2013dose$gridcode))
 #pick unique grides available to both only.
 unique.pop_gride <- unique(fuk_pll$gridcode) 
 unique.air_gride <- unique(fuk2013dose$gridcode)
@@ -51,14 +52,14 @@ gride_matcher <- function(mesh1,mesh2){
         for (i in 1:length(mesh1)){
                 for (j in 1:length(mesh2)){
                         if (mesh1[i] == mesh2[j]){
-                                meshes <- mesh1[i]
-                        }else return(NULL)
+                                meshes[[i]] <- mesh1[i]
+                        }
                 }
         }
 }
 
 matched_grides <- gride_matcher(mesh1=unique.pop_gride, mesh2 = unique.air_gride)
-length(matched_grides)
+length(matched_grides); class(matched_grides)
 # Look for differing grides
 popAir_gride <- data.frame(a = fuk2013dose$gridcode,b = fuk_pop$gridcode)
 View(popAir_gride)
