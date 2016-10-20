@@ -8,13 +8,16 @@ date: "August 10, 2016"
 output: html_document
 ---
 
-## DOES POPULATION DENSITY AND LAND USE AFFECT THE RATE OF REDUCTION OF FUKUSHIMA DAICHI RADIATIONS? 
+### Part 1: AIR DOSE UNDERSTANDING
 
+#### Part I: Data Loading, Cleaning and Exploring
 
-
-## Part I: Data Loading, Cleaning and Exploring
-
-#### 1.1 Nihomatsu City,70km to Fukushima Daichi
+<p> The Air Dose Rate measurements were collected from three sources: </p>
+<ol>
+ <li>Cars and Buses with Sensors: Measure Air of 100m&#0178 from the road</li>
+ <li>Un manned Auto Helicopter: Measure from 300m above ground</li>
+ <li>Fixed Sensors: Geographically sparsed </li>
+</ol>
 
 1.11 Required Packages
 ```{r, error=FALSE,warning=FALSE, message=FALSE}
@@ -28,7 +31,7 @@ library(formatR)
 ```
 
 
-##### 1.11 Loading June 2011 and Nov 2013 Fukushima Data and selecting Nihomatsu's.
+##### 1.11 Loading June 2011 and Nov 2013 Fukushima Data and selecting Fukushima's.
 ```{r}
 fuk2011 <- read.csv("jun_2011_fukushima.csv")
 fuk2013 <- read.csv("nov_2013_fukushima.csv")
@@ -71,7 +74,7 @@ fuk2013dose$gridcode <- gsub('.{1}$', '', fuk2013dose$gridcode)
 ```
 
 <ul>
- <li>Visible reduction of Average Air Dose Distribution by half  in Nihomatsu.</li>
+ <li>Visible reduction of Average Air Dose Distribution by half  in Fukushima.</li>
  <li>Trouble is knowing the distribution of causes of this reduction?</li>
 </ul>
 
@@ -126,7 +129,7 @@ fuk2013_plot
 ```
 <br>
 
-##### 1.18 Nihommatsu 2011, Counts of Measuring Locations per Air Dose Rate
+##### 1.18 Fukushima 2011, Counts of Measuring Locations per Air Dose Rate
 ```{r, warning = FALSE, message = FALSE}
 ggplot(fuk2011_q, aes(daichi_distance,AvgAirDoseRate)) +
         geom_point() +
@@ -134,7 +137,7 @@ ggplot(fuk2011_q, aes(daichi_distance,AvgAirDoseRate)) +
         ggtitle("AvgAirDose against Distance to Daichi Plant")
 ```
 
-##### 1.19 Nihommatsu 2011,Counts of Measuring Locations per Air Dose Rate 
+##### 1.19 Fukushima 2011,Counts of Measuring Locations per Air Dose Rate 
 ```{r, warning = FALSE, message = FALSE}
 ggplot(data = fuk2013_q) +
         geom_bar(mapping = aes(x = daichi_distance, fill = dose_quants), width = 1)+
@@ -157,21 +160,12 @@ confint(fit1)
 
 $$AvgAirDoseRate = \beta_{0} + \beta_{1} popn density + \beta_{2} human activities + \epsilon_{i}$$
 
-**Challenge**
-<p> The Air Dose Rate measurements were collected from three sources: </p>
-<ol>
- <li>Cars and Buses with Sensors: Measure Air of 100m&#0178 from the road</li>
- <li>Un manned Auto Helicopter: Measure from 300m above ground</li>
- <li>Fixed Sensors: Geographically sparsed </li>
-</ol>
 
-<p> What constitutes Land Use?: </p>
-<ol>
- <li>Farming: Short life span crops lead to frequent land tilling</li>
- <li>Cleaned Places: Parks, GolfCourses, Gardens are cleaned too and could reduce radiations</li>
-<br>
-</ol>
+
+### Part 2: POPULATION UNDERSTANDING
+
 <p> Population density and land usage is measured on a 500m&#0178; basis</p>
+
 ```{r, warning = FALSE, message = FALSE}
 fuk_pop <- read.csv("fuk.csv")
 # Convert mesh gridecode to lat/long
@@ -247,70 +241,45 @@ for (i in 1:length(grides) ){
 }
 
 res <- as.data.frame(mylist)
-View(res)
+# View(res)
 #test
 # df <- data.frame(matrix(unlist(res), nrow=10831, byrow=T))
 # df <- ldply (res, data.frame)
 
-library(data.table)
-df <- as.data.frame(rbindlist(mylist, fill=TRUE))
-df[,"gridcode"] <- grides 
-View(df)
+#library(data.table)
+# df <- as.data.frame(rbindlist(mylist, fill=TRUE))
+# df[,"gridcode"] <- grides 
+# View(df)
 # merge gridcode and lat/lon datasets of Fuk population
-fuk_ll <- merge(fuk_pop, df, by.x = "gridcode", by.y = "gridcode", all = TRUE)
-write.csv(fuk_pop, file="fuk_pop.csv",row.names = FALSE)
+# fuk_ll <- merge(fuk_pop, df, by.x = "gridcode", by.y = "gridcode", all = TRUE)
+# write.csv(fuk_pop, file="fuk_pop.csv",row.names = FALSE)
 #load new dataset
-fuk_pop <- read.csv("fuk_pop.csv")
-View(fuk_pop)
-no_unique <- length(unique(fuk_pop$gridcode))
-no_unique
-```
-
-#trial plots
-```{r}
-
-pop_plot <- leaflet() %>%
-        addTiles()%>%
-        addPolylines(data = fuk_ll,lng = ~long, lat = ~lat)
-pop_plot        
-#remove duplicate lat/lon
-uniq <- unique(x=df[,-3])
-
-uniq_plot <- leaflet() %>%
-        addTiles()%>%
-        addCircles(data = uniq,lng = ~long, lat = ~lat)
-uniq_plot
-
-# Unique, lat or lon only
-data <- subset(fuk_ll, !duplicated(fuk_ll[,7]))
-dim(data)
-
-uniq_plot <- leaflet() %>%
-        addTiles()%>%
-        addCircles(data = data,lng = ~long, lat = ~lat)
-uniq_plot
-```
-
-#### Understand population distribution and airdose
-Population link:http://www.e-stat.go.jp/SG1/estat/toukeiChiri.do?method=init
-Fuk Population
-5640: 1degree, 40min,80km
-00: 5min,7'30min, 10km
-19: 30s, 45s, 1km
-4: 15s, 22.5s, 500m [1:SW,2:SE,3:NW,4:NE]
-
-```{}
-#remove slashes from 2013 AirDose grids
-fuk2013_q$gridcode <- gsub("_","",fuk2013_q$gridcode)
-#change fuk_ll$gridcode to character from integer
-fuk_ll$gridcode <- as.character(fuk_ll$gridcode)
-# Merge fuk_ll and fuk2013_q
-
-fuk_air_pop <- merge(fuk2013dose,fuk_pop, by.y = "gridcode", all.x )
+#fuk_pop <- read.csv("fuk_pop.csv")
+# no_unique <- length(unique(fuk_pop$gridcode))
 
 ```
 
-#### 2.30 Using other machine learning algorithms
+
+
+
+### Part 3: LAND USE UNDERSTANDING
+
+http://nlftp.mlit.go.jp/ksj-e/old/cgi-bin/_download_view.cgi
+Forest and Public Lands mesh
+Land Classification Mesh
+
+Agricultural Areas (surface):A12-60A-48-01.1.zip 10.8MB	
+Agricultural Areas (surface):A12-60A-48-01.0a.zip	10.82MB
+
+<p> What constitutes Land Use?: </p>
+<ol>
+ <li>Farming: Short life span crops lead to frequent land tilling</li>
+ <li>Cleaned Places: Parks, GolfCourses, Gardens are cleaned too and could reduce radiations</li>
+<br>
+</ol>
+
+
+### Part 4: USING MACHINE LEARNING MACHINE ALGORITHMS TO DISCOVER RELATIONSHIP AMONG POPULATION, AIR DOSE AND LAND USE
 
 <p> The Fukushima Nuclear Radiations is multi dimensional;</p>
 <li> *Three major Isotopes each with;*</li>
@@ -321,14 +290,3 @@ fuk_air_pop <- merge(fuk2013dose,fuk_pop, by.y = "gridcode", all.x )
 
 
 **end**
-
-#### 2.40 LAND USE
-http://nlftp.mlit.go.jp/ksj-e/old/cgi-bin/_download_view.cgi
-Forest and Public Lands mesh
-Land Classification Mesh
-
-Agricultural Areas (surface):A12-60A-48-01.1.zip 10.8MB	
-Agricultural Areas (surface):A12-60A-48-01.0a.zip	10.82MB
-
-### Airdose change to 500m2
-

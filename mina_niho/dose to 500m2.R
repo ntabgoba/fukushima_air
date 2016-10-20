@@ -118,5 +118,10 @@ popAir_plot <- leaflet() %>%
                   options = popupOptions(closeButton = TRUE)) 
 popAir_plot
 
-# predictions
+# How far do people live from Daichi
+ggplot(data = popAir_merged) +
+        geom_bar(mapping = aes(x = daichi_distance, fill = pop_quants), width = 1)+
+        ggtitle("Population dist with resp to Daichi Distance")
+
+#
 
