@@ -242,20 +242,19 @@ for (i in 1:length(grides) ){
 
 res <- as.data.frame(mylist)
 # View(res)
-#test
-# df <- data.frame(matrix(unlist(res), nrow=10831, byrow=T))
-# df <- ldply (res, data.frame)
+df <- data.frame(matrix(unlist(res), nrow=10831, byrow=T))
+df <- ldply (res, data.frame)
 
 #library(data.table)
-# df <- as.data.frame(rbindlist(mylist, fill=TRUE))
-# df[,"gridcode"] <- grides 
-# View(df)
+df <- as.data.frame(rbindlist(mylist, fill=TRUE))
+df[,"gridcode"] <- grides 
+View(df)
 # merge gridcode and lat/lon datasets of Fuk population
-# fuk_ll <- merge(fuk_pop, df, by.x = "gridcode", by.y = "gridcode", all = TRUE)
-# write.csv(fuk_pop, file="fuk_pop.csv",row.names = FALSE)
-#load new dataset
-#fuk_pop <- read.csv("fuk_pop.csv")
-# no_unique <- length(unique(fuk_pop$gridcode))
+fuk_ll <- merge(fuk_pop, df, by.x = "gridcode", by.y = "gridcode", all = TRUE)
+write.csv(fuk_pop, file="fuk_pop.csv",row.names = FALSE)
+# load new dataset
+fuk_pop <- read.csv("fuk_pop.csv")
+ no_unique <- length(unique(fuk_pop$gridcode))
 
 ```
 
