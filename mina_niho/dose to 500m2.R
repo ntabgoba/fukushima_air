@@ -88,6 +88,7 @@ library(readr)
 library(dplyr)
 library(RColorBrewer)
 library(ggplot2)
+library(plotly)
 
 popAir_merged <- popAir_merge %>%
         mutate(pop_quants = (cut2(popAir_merge$totalpop,cuts=c(10,100,500,1000,1500,2000,2500,3000),levels.mean=TRUE,digits=0)))
@@ -97,7 +98,7 @@ write.csv(popAir_merged, file="popAir_merged.csv",row.names = FALSE)
 ### start 3:09pm 24th Oct 2016
 list.files()
 popAir <- read.csv("popAir_merged.csv")
-View(popAir)
+
 popAir1 <- select(popAir,"gridcode","pref", "city","gridCenterNorthlat","gridCenterEastlng","gridCenterNorthlatDec","gridCenterEastlngDec",
                   "daichi_distance","no_samples","AvgAirDoseRate","NE_nLat","NE_eLong","NW_eLong","SW_nLat","SW_eLong","SE_nLat","SE_eLong",
                   "dose_quants","totalpop","male","female","household","lat","long","pop_quants")
@@ -105,6 +106,7 @@ popAir1 <- select(popAir,"gridcode","pref", "city","gridCenterNorthlat","gridCen
 popAir1 <- select(popAir,gridcode,
                   daichi_distance,no_samples,AvgAirDoseRate,NE_nLat,NE_eLong,NW_eLong,SW_nLat,SW_eLong,SE_nLat,SE_eLong,
                   dose_quants,totalpop,male,female,lat,long,pop_quants)
+View(popAir1)
 popAirSmry <- group_by(popAir1, gridcode)
 plot(popAirSmry$AvgAirDoseRate, popAirSmry$totalpop)
 

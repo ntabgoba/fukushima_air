@@ -13,25 +13,19 @@ h <- grep
 gio <- c("5539_3287_27","5539_3287_37","5539_3287_47")
 substr(gio,11,12)
 
-plot_ly(z = ~volcano, type = "surface")
-?plotly
+#trials
+library(mapproj)
 
-toplot <- as.matrix(x= popAir1$daichi_distance, y = popAir1$AvgAirDoseRate, z = popAir1$totalpop)
-plot_ly(z = ~toplot, type = "surface") 
-%>% add_surface()
+ggplot() +
+        geom_point(data = popAir1, 
+                     aes(x = SW_eLong, y = SW_nLat,  fill = dose_quants), size = 0.8) + 
+        coord_map()
 
-#jap
-g <- list(
-        scope = 'japan',
-        showland = T,
-        landcolor = toRGB("gray90"),
-        showcountries = F,
-        subunitcolor = toRGB("white")
-)
+jp <- map_data("japan")
+?map_data
+ggplot(jp, aes(long, lat, group = group)) +
+        geom_polygon(fill = "white", colour = "black")
 
-plot_geo(popAir1) %>%
-        add_markers(data = popAir1,x = ~SW_eLong, y = ~SW_nLat, color = I("blue"), alpha = 0.5) %>%
-        layout(geo = g)
-?plot_geo
-
-
+ggplot(jp, aes(long, lat, group = group)) +
+        geom_polygon(fill = "white", colour = "black") +
+        coord_quickmap()

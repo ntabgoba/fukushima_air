@@ -1,6 +1,7 @@
 #Choreplat
 library(choroplethr)
 library(choroplethrAdmin1)
+library(mapproj)
 data(admin1.map)
 admin_map(japan)
 data(df_japan_census)
@@ -13,5 +14,10 @@ admin1_choropleth(country.name = "japan",
                   legend       = "Population", 
                   num_colors   = 1, 
                   zoom         = tohok)
-
-
+head(df_japan_census)
+#list of all the countries
+unique(admin1.regions$country)
+# ggplot of japan
+jp <- map_data("world",region=c("Japan"))
+ggplot(jp, aes(x = long, y = lat, group = group)) +
+        geom_polygon(fill = "white", colour = "black")
