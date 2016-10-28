@@ -98,7 +98,7 @@ write.csv(popAir_merged, file="popAir_merged.csv",row.names = FALSE)
 ### start 3:09pm 24th Oct 2016
 list.files()
 popAir <- read.csv("popAir_merged.csv")
-
+View(popAir)
 popAir1 <- select(popAir,"gridcode","pref", "city","gridCenterNorthlat","gridCenterEastlng","gridCenterNorthlatDec","gridCenterEastlngDec",
                   "daichi_distance","no_samples","AvgAirDoseRate","NE_nLat","NE_eLong","NW_eLong","SW_nLat","SW_eLong","SE_nLat","SE_eLong",
                   "dose_quants","totalpop","male","female","household","lat","long","pop_quants")
@@ -117,33 +117,26 @@ legend("topright", legend = c("AvgAirDoseRate","Popn"))
 ### End 24th Oct 2016
 #plots
 iro <- colorFactor(
-        palette = "YlOrRd",
-        domain = popAir_merged$pop_quants
+        palette = "Blues",
+        domain = popAir$pop_quants
 )
 
+iro2 <- colorFactor(
+        palette = "Reds",
+        domain = popAir$dose_quants
+)
 fukulink <- paste(sep = "<br/>",
                   "<br><a href='http://www.tepco.co.jp
                   /en/decommision/index-e.html'>Fukushima Daichi</a></b>",
                   "Source of radiations")
 
-
+#comparative plot of pop and Air
 popAir_plot <- leaflet() %>%
         addTiles()%>%
-        addRectangles(data = popAir_merged,lng1 = ~SW_eLong, lat1 = ~SW_nLat,
-                      lng2 = ~NE_eLong, lat2 = ~NE_nLat,
-                      color = ~iro(popAir_merged$pop_quants))%>%
-        addLegend("bottomright", pal = iro, values = popAir_merged$pop_quants,
-                  title = "Population Dist",
-                  labFormat = labelFormat(prefix = "no. of pple"),
-                  opacity = 1)%>%
-        addPopups(lat = 37.4211, lng = 141.0328,popup = fukulink,
-                  options = popupOptions(closeButton = TRUE)) 
+        addCircleMarkers(data = popAir,lng = ~long, lat = ~lat, fillColor = ~iro(popAir$pop_quants))%>%
+        addRectangles(data = popAir,lng1 = ~SW_eLong, lat1 = ~SW_nLat,
+                   lng2 = ~NE_eLong, lat2 = ~NE_nLat,
+                   fillColor = ~iro2(popAir$dose_quants))
 popAir_plot
 
-# How far do people live from Daichi
-ggplot(data = popAir_merged) +
-        geom_bar(mapping = aes(x = daichi_distance, fill = pop_quants), width = 1)+
-        ggtitle("Population dist with resp to Daichi Distance")
-
-#
 
