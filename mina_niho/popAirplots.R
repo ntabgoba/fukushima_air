@@ -21,3 +21,12 @@ unique(admin1.regions$country)
 jp <- map_data("world",region=c("Japan"))
 ggplot(jp, aes(x = long, y = lat, group = group)) +
         geom_polygon(fill = "white", colour = "black")
+
+# group by gridecode and compare pop and total popn
+a1 <- select(popAir, gridcode, daichi_distance, AvgAirDoseRate, totalpop)
+
+
+
+
+
+

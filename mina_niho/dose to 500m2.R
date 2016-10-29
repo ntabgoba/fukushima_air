@@ -122,7 +122,7 @@ iro <- colorFactor(
 )
 
 iro2 <- colorFactor(
-        palette = "Reds",
+        palette = "PuRd",
         domain = popAir$dose_quants
 )
 fukulink <- paste(sep = "<br/>",
@@ -133,10 +133,46 @@ fukulink <- paste(sep = "<br/>",
 #comparative plot of pop and Air
 popAir_plot <- leaflet() %>%
         addTiles()%>%
-        addCircleMarkers(data = popAir,lng = ~long, lat = ~lat, fillColor = ~iro(popAir$pop_quants))%>%
+        addCircles(data = popAir,lng = ~long, lat = ~lat,color = ~iro(popAir$pop_quants),radius = ~(popAir$pop_quants))%>%
         addRectangles(data = popAir,lng1 = ~SW_eLong, lat1 = ~SW_nLat,
                    lng2 = ~NE_eLong, lat2 = ~NE_nLat,
-                   fillColor = ~iro2(popAir$dose_quants))
+                   color = ~iro2(popAir$dose_quants))%>%
+        addLegend("bottomright", pal = iro, values = popAir$pop_quant,
+          title = "Population",
+          labFormat = labelFormat(prefix = "pple "),
+          opacity = 1)%>%
+        addLegend("topright", pal = iro2, values = popAir$dose_quant,
+                  title = "Radiations",
+                  labFormat = labelFormat(prefix = "µSv/h "),
+                  opacity = 1)
 popAir_plot
 
+## minus 0.1mSv
 
+poAir <- filter(popAir,dose_quants > 0.1)
+View(poAir)
+
+iro <- colorFactor(
+        palette = "Blues",
+        domain = poAir$pop_quants
+)
+
+iro2 <- colorFactor(
+        palette = "PuRd",
+        domain = poAir$dose_quants
+)
+popAir_plot <- leaflet() %>%
+        addTiles()%>%
+        addCircles(data = poAir,lng = ~long, lat = ~lat,color = ~iro(poAir$pop_quants),radius = ~(poAir$pop_quants))%>%
+        addRectangles(data = poAir,lng1 = ~SW_eLong, lat1 = ~SW_nLat,
+                      lng2 = ~NE_eLong, lat2 = ~NE_nLat,
+                      color = ~iro2(poAir$dose_quants))%>%
+        addLegend("bottomright", pal = iro, values = popAir$pop_quant,
+                  title = "Population",
+                  labFormat = labelFormat(prefix = "pple "),
+                  opacity = 1)%>%
+        addLegend("topright", pal = iro2, values = poAir$dose_quant,
+                  title = "Radiations",
+                  labFormat = labelFormat(prefix = "µSv/h "),
+                  opacity = 1)
+popAir_plot
