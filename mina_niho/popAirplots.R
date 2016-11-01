@@ -29,6 +29,9 @@ jpmap <- ggplot(jp, aes(x = long, y = lat, group = group)) +
 jpmap + geom_point(data = popAir,aes(colour = popAir$dose_quants, size = popAir$pop_quants))
 
 ## plotting population on to the map
+ggplot(NULL) + 
+        geom_polygon(data = jp, aes(x = long, y = lat, group = group), fill = "blue") +
+        geom_point(data = pp_grp,aes(x = long, y = lat, group = group), shape=21, fill= pp_grp$totalpop)
 
 
 #pointData$group <- 1 # ggplot needs a group to work with
