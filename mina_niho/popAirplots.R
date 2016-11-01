@@ -33,6 +33,10 @@ ggplot(NULL) +
         geom_polygon(data = jp, aes(x = long, y = lat, group = group), fill = "blue") +
         geom_point(data = pp_grp,aes(x = long, y = lat, group = group), shape=21, fill= pp_grp$totalpop)
 
+ggplot(county_map, aes(x = long, y = lat, group = group)) +
+        geom_polygon(aes(fill = value)) +
+        coord_map() +
+        geom_point(data = pointData, aes(x = long, y = lat), shape = 21, fill = "red")
 
 #pointData$group <- 1 # ggplot needs a group to work with
 pp_grp <- select(popAir, lat, long, totalpop) 
