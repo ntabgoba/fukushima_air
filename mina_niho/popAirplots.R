@@ -2,9 +2,13 @@
 library(choroplethr)
 library(choroplethrAdmin1)
 library(mapproj)
-data(admin1.map)
-admin_map(japan)
+library(maps)
+library(mapdata)
+library(maptools)
+library(scales)
 data(df_japan_census)
+install.packages("gpclib")
+library(gpclib)
 #tohoku region pop data
 df_japan_census$value = df_japan_census$pop_2010
 tohok = c("fukushima", "tochigi","ibaraki", "miyagi","yamagata","niigata","gunma")
@@ -19,14 +23,26 @@ head(df_japan_census)
 unique(admin1.regions$country)
 # ggplot of japan
 jp <- map_data("world",region=c("Japan"))
-ggplot(jp, aes(x = long, y = lat, group = group)) +
-        geom_polygon(fill = "white", colour = "black")
+jpmap <- ggplot(jp, aes(x = long, y = lat, group = group)) +
+        geom_polygon(fill = "white", colour = "black")+
+        geom_
+jpmap + geom_point(data = popAir,aes(colour = popAir$dose_quants, size = popAir$pop_quants))
 
+## plotting population on to the map
+
+
+#pointData$group <- 1 # ggplot needs a group to work with
+pp_grp <- select(popAir, lat, long, totalpop) 
+pp_grp$group <- 1
 # group by gridecode and compare pop and total popn
 a1 <- select(popAir, gridcode, daichi_distance, AvgAirDoseRate, totalpop)
+?map_data
+#####
 
-
-
+map("worldHires", "Japan",
+    xlim = c(-118.4, -86.7),
+    ylim = c(14.5321, 32.71865),
+    col = "blue", fill = TRUE)
 
 
 
