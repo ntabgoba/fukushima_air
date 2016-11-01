@@ -27,8 +27,29 @@ rsconnect/
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
+
+#fuk population
 /fukupop/*.pdf
 /fukupop/*.png
 /fukupop/*.txt
 /fukupop/*.csv
 /fukupop/*.xlsx
+
+#fuk land use
+/landuse/
+/landuse/*.pdf
+/landuse/*.png
+/landuse/*.txt
+/landuse/*.csv
+/landuse/*.xml
+
+#fuk contours
+/contour/
+/countour/*.pdf
+/countour/*.png
+/countour/*.txt
+/countour/*.csv
+/countour/*.kmz
+/countour/*.kml
+
+#fuk wind speed
