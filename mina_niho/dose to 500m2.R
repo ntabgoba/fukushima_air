@@ -130,31 +130,9 @@ fukulink <- paste(sep = "<br/>",
                   /en/decommision/index-e.html'>Fukushima Daichi</a></b>",
                   "Source of radiations")
 # lines connecting the circles of illustration
-
-
 linedf <- data.frame(lat =c(37.431819,37.488344), long = c(140.805795,140.128471))
-linedf , 
 #comparative plot of pop and Air
-popAir_plot <- leaflet() %>%
-        addTiles()%>%
-        addCircles(data = popAir,lng = ~long, lat = ~lat,color = ~iro(popAir$pop_quants),radius = ~(popAir$pop_quants))%>%
-        addRectangles(data = popAir,lng1 = ~SW_eLong, lat1 = ~SW_nLat,
-                   lng2 = ~NE_eLong, lat2 = ~NE_nLat,
-                   color = ~iro2(popAir$dose_quants))%>%
-        addLegend("bottomright", pal = iro, values = popAir$pop_quant,
-          title = "Population",
-          labFormat = labelFormat(prefix = "pple "),
-          opacity = 1)%>%
-        addCircles(lat = 37.4211, lng = 141.0328, radius = 20000, color = "Red", fill = FALSE,options )%>%
-        addCircles(lat = 37.4211, lng = 141.0328, radius = 80000, color = "Yellow", fill = FALSE )%>%
-        addPolylines(data = linedf, lng = ~long, lat = ~lat)%>%
-        addLegend("topright", pal = iro2, values = popAir$dose_quant,
-                  title = "Radiations",
-                  labFormat = labelFormat(prefix = "µSv/h "),
-                  opacity = 1)
-popAir_plot
-
-## minus 0.1mSv
+## minus 0.1uSv
 
 poAir <- filter(popAir,dose_quants > 0.1)
 View(poAir)
