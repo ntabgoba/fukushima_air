@@ -184,5 +184,9 @@ popAir_plot <- leaflet() %>%
         addLegend("topright", pal = iro2, values = poAir$dose_quant,
                   title = "Radiations",
                   labFormat = labelFormat(prefix = "µSv/h "),
-                  opacity = 1)
+                  opacity = 1)%>%
+        addPopups(lat = 37.4211, lng = 141.0328, popup = "Daiichi")%>%
+        addPopups(lat = 37.43182, lng = 140.8058, popup = "20km from Daiichi")%>%
+        addPopups(lat = 37.48834, lng=140.1285, popup = "80km from Daiichi")
+                  
 popAir_plot
