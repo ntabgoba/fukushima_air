@@ -129,7 +129,20 @@ fukulink <- paste(sep = "<br/>",
                   "<br><a href='http://www.tepco.co.jp
                   /en/decommision/index-e.html'>Fukushima Daichi</a></b>",
                   "Source of radiations")
+# lines connecting the circles of illustration
+dfline <- data.frame(Observation = c("A", "B"),
+                   InitialLat = c(37.431819),
+                   InitialLong = c(140.805795),
+                   NewLat = c(37.487706),
+                   NewLong = c(140.150069),
+                   stringsAsFactors = FALSE)
+dfline
+dfline2 <- unique(data.frame(group = c("A", "B"),
+                    lat = c(dfline$InitialLat, dfline$NewLat),
+                    long = c(dfline$InitialLong, dfline$NewLong)))
 
+linedf <- data.frame(lat =c(37.431819,37.487706), long = c(140.805795,140.150069))
+linedf
 #comparative plot of pop and Air
 popAir_plot <- leaflet() %>%
         addTiles()%>%
@@ -141,6 +154,9 @@ popAir_plot <- leaflet() %>%
           title = "Population",
           labFormat = labelFormat(prefix = "pple "),
           opacity = 1)%>%
+        addCircles(lat = 37.4211, lng = 141.0328, radius = 20000, color = "Red", fill = FALSE,options )%>%
+        addCircles(lat = 37.4211, lng = 141.0328, radius = 80000, color = "Yellow", fill = FALSE )%>%
+        addPolylines(data = linedf, lng = ~long, lat = ~lat)%>%
         addLegend("topright", pal = iro2, values = popAir$dose_quant,
                   title = "Radiations",
                   labFormat = labelFormat(prefix = "µSv/h "),
