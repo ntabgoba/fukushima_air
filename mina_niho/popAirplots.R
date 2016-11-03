@@ -57,5 +57,7 @@ df_japan_census$value[8] <- 10
 admin1_choropleth(country.name = "japan", 
                   df           = df_japan_census, 
                   
-                  num_colors   = 1)
+                  num_colors   = 1,
+                  add = TRUE)
+map.scale(x=15.5, y=42.75, ratio=FALSE, relwidth=0.2)
 

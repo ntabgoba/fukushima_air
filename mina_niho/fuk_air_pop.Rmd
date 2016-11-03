@@ -289,3 +289,12 @@ Agricultural Areas (surface):A12-60A-48-01.0a.zip	10.82MB
 
 
 **end**
+
+
+tokyo_daichi <- leaflet() %>%
+        addTiles()%>%
+        addPopups(lat = 37.4211, lng = 141.0328,popup = "FDNPP",
+                  options = popupOptions(closeButton = TRUE))%>%
+         addPopups(lat = 35.6895, lng = 139.6917,popup = "Tokyo",
+                  options = popupOptions(closeButton = TRUE)) 
+tokyo_daichi
