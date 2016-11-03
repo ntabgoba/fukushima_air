@@ -51,5 +51,11 @@ map("worldHires", "Japan",
     ylim = c(14.5321, 32.71865),
     col = "blue", fill = TRUE)
 
-
+## map of fukushima and tokyo
+df_japan_census$value[41] <- 10
+df_japan_census$value[8] <- 10
+admin1_choropleth(country.name = "japan", 
+                  df           = df_japan_census, 
+                  
+                  num_colors   = 1)
 
