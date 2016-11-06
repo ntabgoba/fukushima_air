@@ -1,7 +1,9 @@
 # learn merge
-data1 <- data.frame(a = c("ji","hi","we"), b = c("jo","ho","wo"))
-data2 <- data.frame(c = c(2112,3112,4112), d = c(5312,6312,7312))
-data3 <- merge(data1,data2)
+data1 <- data.frame(a = c(23,24,25), b = c(11,14,13))
+data2 <- data.frame(a = c(2112,3112,23,4112,25), b = c(5312,11,14,136312,7312))
+
+newd <- Reduce(rbind, list(data1,data2))
+View(newd)
 data3$c <- gsub('.{1}$', '', data3$c)
 
 data4 <- data.frame(a = c(111222333,444555666,777888999), b = c("jo","ho","wo"))
